@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# system files
+*.swp
+*~
+.DS_Store
+
+# CMake directories
+build*/
+install*/
