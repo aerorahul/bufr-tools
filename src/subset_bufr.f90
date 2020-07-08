@@ -1,9 +1,5 @@
 program subset_bufr
 
-!$> module load bufr-intel/11.2.0
-!$> ifort -o subset_bufr.x subset_bufr.f90 $BUFR_LIB4
-!$> subset_bufr.x input_bufr output_bufr obs_fraction
-
 implicit none
 
 character(len=255) :: finput, foutput
