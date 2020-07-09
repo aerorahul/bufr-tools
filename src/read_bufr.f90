@@ -191,6 +191,9 @@ subroutine read_data(finput, nchanl)
     call closbf(lunin)
     close(lunin)
 
+    deallocate(bfr1bhdr, bfr2bhdr)
+    deallocate(data1b8)
+
 end subroutine read_data
 
 end program read_bufr
