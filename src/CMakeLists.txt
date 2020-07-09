@@ -12,11 +12,21 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
 
 endif()
 
+# Subsetting application
 set(exe subset_bufr.x)
 set(srcs subset_bufr.f90)
 add_executable(${exe} ${srcs})
-target_link_libraries(${exe} PRIVATE bufr::bufr_4_DA)
 list(APPEND EXE_TARGETS ${exe})
+
+# Read application
+set(exe read_bufr.x)
+set(srcs read_bufr.f90)
+add_executable(${exe} ${srcs})
+list(APPEND EXE_TARGETS ${exe})
+
+foreach(_tgt IN LISTS EXE_TARGETS)
+  target_link_libraries(${_tgt} PRIVATE bufr::bufr_4_DA)
+endforeach()
 
 install(TARGETS ${EXE_TARGETS} RUNTIME
         DESTINATION bin
