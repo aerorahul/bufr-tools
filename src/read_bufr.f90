@@ -25,7 +25,26 @@ program read_bufr
     real(r_double), dimension(:), allocatable :: bufrdata
   end type BufrData
 
+  type :: IODAData
+    ! private
+    ! public
+    integer :: nlocs
+    integer :: nchanl
+    integer(i_single), dimension(:), allocatable :: satid
+    integer(i_single), dimension(:), allocatable :: ifov
+    integer(i_single), dimension(:,:), allocatable :: datetime
+    real(r_double), dimension(:), allocatable :: olat
+    real(r_double), dimension(:), allocatable :: olon
+    real(r_double), dimension(:), allocatable :: terrain
+    real(r_double), dimension(:), allocatable :: lza
+    real(r_double), dimension(:), allocatable :: sza
+    real(r_double), dimension(:), allocatable :: sat_aziang
+    real(r_double), dimension(:), allocatable :: sol_aziang
+    real(r_double), dimension(:,:), allocatable :: raddata
+  end type IODAData
+
   type(BufrData), dimension(:), allocatable :: bdata
+  type(IODAData) :: idata
 
   call getarg(1, finput)
   call getarg(2, charbuf)
@@ -40,7 +59,10 @@ program read_bufr
   allocate(bdata(nirep))
   call read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
 
+  call toIODA(bdata, idata)
+
   call dump_bufrdata_to_disk(bdata)
+  call dump_iodadata_to_disk(idata)
 
   deallocate(bdata)
 
@@ -209,6 +231,48 @@ subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
 
 end subroutine read_bufrdata
 
+! "convert" bdata structure into IODA data structure
+subroutine toIODA(bdata, idata)
+
+  type(BufrData), dimension(:), intent(in) :: bdata
+  type(IODAData), intent(out) :: idata
+
+  integer :: iloc
+
+  idata%nlocs = size(bdata, 1)
+  idata%nchanl = bdata(1)%nchanl
+
+  allocate(idata%satid(idata%nlocs))
+  allocate(idata%ifov(idata%nlocs))
+  allocate(idata%datetime(idata%nlocs, 6))
+  allocate(idata%olat(idata%nlocs))
+  allocate(idata%olon(idata%nlocs))
+  allocate(idata%terrain(idata%nlocs))
+  allocate(idata%lza(idata%nlocs))
+  allocate(idata%sza(idata%nlocs))
+  allocate(idata%sat_aziang(idata%nlocs))
+  allocate(idata%sol_aziang(idata%nlocs))
+  allocate(idata%raddata(idata%nlocs, idata%nchanl))
+
+  idata%satid(:) = bdata(:)%satid
+  idata%ifov(:) = bdata(:)%ifov
+  !idata%datetime
+  idata%olat(:) = bdata(:)%olat
+  idata%olon(:) = bdata(:)%olon
+  idata%terrain(:) = bdata(:)%terrain
+  idata%lza(:) = bdata(:)%lza
+  idata%sza(:) = bdata(:)%sza
+  idata%sat_aziang(:) = bdata(:)%sat_aziang
+  idata%sol_aziang(:) = bdata(:)%sol_aziang
+  !idata%raddata
+
+  do iloc = 1, idata%nlocs
+    idata%datetime(iloc, :) = bdata(iloc)%dtime
+    idata%raddata(iloc, :) = bdata(iloc)%bufrdata
+  enddo
+
+end subroutine toIODA
+
 ! dump bufr data to disk
 subroutine dump_bufrdata_to_disk(bdata)
 
@@ -235,7 +299,7 @@ subroutine dump_bufrdata_to_disk(bdata)
     write(lundt, '((A,X,I4,X),5(A,X,I2,X))') 'year =', bdata(irep)%dtime(1), &
                                               'mth =', bdata(irep)%dtime(2), &
                                               'day =', bdata(irep)%dtime(3), &
-                                              ' hr =', bdata(irep)%dtime(4), &
+                                               'hr =', bdata(irep)%dtime(4), &
                                               'min =', bdata(irep)%dtime(5), &
                                               'sec =', bdata(irep)%dtime(6)
 
@@ -261,5 +325,62 @@ subroutine dump_bufrdata_to_disk(bdata)
   close(lundt)
 
 end subroutine dump_bufrdata_to_disk
+
+! dump IODA data to disk
+subroutine dump_iodadata_to_disk(idata)
+
+  type(IODAData), intent(in) :: idata
+
+  integer :: nchanl
+
+  integer :: iloc
+  integer :: ichanl
+  integer :: iret
+
+  integer, parameter :: lundt = 40
+
+  nchanl = idata%nchanl
+
+  iret = system('rm -f iodadata.txt')
+
+  write(6, '(A)') 'Writing IODA data into iodadata.txt'
+  open(lundt, file='iodadata.txt', status='new')
+
+  do iloc = 1, idata%nlocs
+
+    write(lundt, '(1(A,X,I6))') 'Report =', iloc
+
+    write(lundt, '(2(A,X,I4,X))') 'satid =', idata%satid(iloc), &
+                                    'fov =', idata%ifov(iloc)
+
+    write(lundt, '((A,X,I4,X),5(A,X,I2,X))') 'year =', idata%datetime(iloc, 1), &
+                                              'mth =', idata%datetime(iloc, 2), &
+                                              'day =', idata%datetime(iloc, 3), &
+                                               'hr =', idata%datetime(iloc, 4), &
+                                              'min =', idata%datetime(iloc, 5), &
+                                              'sec =', idata%datetime(iloc, 6)
+
+    write(lundt, '(2(A,X,F6.2,X))') 'lat =', idata%olat(iloc), &
+                                    'lon =', idata%olon(iloc)
+
+    write(lundt, '(1(A,X,F6.2,X))') 'terrain =', idata%terrain(iloc)
+
+    write(lundt, '(4(A,X,F6.2,X))')  'local zenith =', idata%lza(iloc),        &
+                                     'solar zenith =', idata%sza(iloc),        &
+                                    'local azimuth =', idata%sat_aziang(iloc), &
+                                    'solar azimuth =', idata%sol_aziang(iloc)
+
+    do ichanl = 1, idata%nchanl
+        write(lundt, '(A,X,I2,X,A,X,F6.2)') 'channel =', ichanl, &
+                                                 'Tb =', idata%raddata(iloc,ichanl)
+    enddo
+
+    write(lundt, '(A)') ''
+
+  enddo
+
+  close(lundt)
+
+end subroutine dump_iodadata_to_disk
 
 end program read_bufr
