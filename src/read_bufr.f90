@@ -42,6 +42,8 @@ program read_bufr
 
   call dump_bufrdata_to_disk(bdata)
 
+  deallocate(bdata)
+
   write(6, '(2(A,X))') 'Finished reading bufr data from', trim(adjustl(finput))
 
   stop
@@ -122,7 +124,6 @@ subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
   integer :: n2bhdr = 4
   real(r_double), allocatable, dimension(:) :: bfr1bhdr, bfr2bhdr
 
-  integer(i_single), dimension(6) :: idate6
   real(r_double) :: dlat, dlon, dlat_deg, dlon_deg, dlat_rad, dlon_rad
 
   hdr1b ='SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS'
@@ -152,14 +153,12 @@ subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
       bdata(irep)%ifov = nint(bfr1bhdr(2))
 
       ! Extract date information
-      idate6(1) = bfr1bhdr(3) ! year
-      idate6(2) = bfr1bhdr(4) ! month
-      idate6(3) = bfr1bhdr(5) ! day
-      idate6(4) = bfr1bhdr(6) ! hour
-      idate6(5) = bfr1bhdr(7) ! minute
-      idate6(6) = bfr1bhdr(8) ! second
-
-      bdata(irep)%dtime(:) = idate6
+      bdata(irep)%dtime(1) = bfr1bhdr(3) ! year
+      bdata(irep)%dtime(2) = bfr1bhdr(4) ! month
+      bdata(irep)%dtime(3) = bfr1bhdr(5) ! day
+      bdata(irep)%dtime(4) = bfr1bhdr(6) ! hour
+      bdata(irep)%dtime(5) = bfr1bhdr(7) ! minute
+      bdata(irep)%dtime(6) = bfr1bhdr(8) ! second
 
       ! Extract observation location (latitude and longitude)
       if (abs(bfr1bhdr(11)) <= 90.0_r_double .and. abs(bfr1bhdr(12)) <= 360.0_r_double) then
