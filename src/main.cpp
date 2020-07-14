@@ -4,7 +4,7 @@
 
 using namespace std;
 
-#include "read_bufr.h"
+#include "bufr_tools.h"
 
 int main(int argc, const char * argv[])
 {

@@ -1,29 +1,11 @@
 program read_bufr
-
+  use bufr_tools
   implicit none
-
-  integer, parameter :: i_single = 4, r_single = 4, r_double = 8
-  real(r_double), parameter :: pi = acos(-1.0_r_double)
-  real(r_double), parameter :: deg2rad = pi / 180.0_r_double
 
   character(len=255) :: finput
   character(len=10) :: charbuf
   integer :: nimsg, nirep
   integer :: nchanl
-
-  type :: BufrData
-    ! private
-    ! public
-    integer :: nchanl
-    integer(i_single) :: satid
-    integer(i_single) :: ifov
-    integer(i_single), dimension(6) :: dtime
-    real(r_double) :: olat, olon
-    real(r_double) :: terrain
-    real(r_double) :: lza, sza
-    real(r_double) :: sat_aziang, sol_aziang
-    real(r_double), dimension(:), allocatable :: bufrdata
-  end type BufrData
 
   type :: IODAData
     ! private
@@ -93,36 +75,6 @@ subroutine dump_bufrtable_to_disk(finput)
 
 end subroutine dump_bufrtable_to_disk
 
-! count the number of messages and records in each message in the bufr file
-subroutine count_messages(finput, nimsg, nirep)
-
-  character(len=255), intent(in) :: finput
-  integer, intent(out) :: nimsg, nirep
-
-  integer :: lunin = 10
-  character(len=8) :: subset
-  integer(kind=i_single) :: ireadmg, ireadsb, idate
-
-  nimsg = 0
-  nirep = 0
-
-  ! Count the number of messages in the bufr file
-  open(lunin, file=trim(adjustl(finput)), status='old', form='unformatted')
-  call openbf(lunin, 'IN', lunin)
-  do while(ireadmg(lunin, subset, idate) == 0)
-    nimsg = nimsg + 1
-    do while(ireadsb(lunin) == 0)
-        nirep = nirep + 1
-    enddo
-  enddo
-  call closbf(lunin)
-  close(lunin)
-
-  write(6, '(2(A,X))') trim(adjustl(finput)), 'contains:'
-  write(6, '(2(A,X,I10,X))') 'total no. of messages =', nimsg, &
-                              'total no. or reports =', nirep
-
-end subroutine count_messages
 
 ! read data from a bufr file
 subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)

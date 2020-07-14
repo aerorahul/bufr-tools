@@ -20,15 +20,14 @@ list(APPEND EXE_TARGETS ${exe})
 
 # Read application
 set(exe read_bufr.x)
-set(srcs read_bufr.f90)
+set(srcs read_bufr.f90 bufr_tools.f90)
 add_executable(${exe} ${srcs})
 list(APPEND EXE_TARGETS ${exe})
 
 # C++ test application
 add_definitions(-DFORTRAN_UNDERSCORE)
-
 set(exe read_bufr_c.exe)
-set(srcs main.cpp read_bufr.cpp read_bufr_lib.f90)
+set(srcs main.cpp bufr_tools.cpp bufr_tools.f90)
 add_executable(${exe} ${srcs})
 list(APPEND EXE_TARGETS ${exe})
 

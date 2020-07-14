@@ -1,7 +1,7 @@
 
 
 
-module read_bufr_lib
+module bufr_tools
   integer, parameter :: i_single = 4, r_single = 4, r_double = 8
   real(r_double), parameter :: pi = acos(-1.0_r_double)
   real(r_double), parameter :: deg2rad = pi / 180.0_r_double
@@ -24,7 +24,7 @@ end module
 
 ! count the number of messages and records in each message in the bufr file
 subroutine count_messages(finput, nimsg, nirep)
-  use read_bufr_lib
+  use bufr_tools
 
   character(len=*), intent(in) :: finput
   integer, intent(out) :: nimsg, nirep
@@ -57,7 +57,7 @@ end subroutine count_messages
 
 ! read data from a bufr file
 subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
-  use read_bufr_lib
+  use bufr_tools
 
   character(len=*), intent(in) :: finput
   integer, intent(in) :: nchanl
