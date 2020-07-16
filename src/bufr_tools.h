@@ -8,7 +8,7 @@ typedef int f_int;
 typedef double f_real;
 
 
-typedef struct __attribute__((packed))
+typedef struct
 {
 	f_int nchanl;
     f_int satid;
@@ -18,7 +18,7 @@ typedef struct __attribute__((packed))
     f_real terrain;
     f_real lza, sza;
     f_real sat_aziang, sol_aziang;
-    f_real* bufrdata;
+    f_real* bufr_data;
 }  BufrData;
 
 typedef vector<BufrData> BufrDataList;

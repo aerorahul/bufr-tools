@@ -1,24 +1,50 @@
 
-
-
 module bufr_tools
+  use iso_c_binding
+
   integer, parameter :: i_single = 4, r_single = 4, r_double = 8
   real(r_double), parameter :: pi = acos(-1.0_r_double)
   real(r_double), parameter :: deg2rad = pi / 180.0_r_double
 
-  type :: BufrData
+  integer, parameter :: sizeof_bufrdata = 104
+
+  type, bind(c) :: BufrData
     ! private
     ! public
-    integer :: nchanl
-    integer(i_single) :: satid
-    integer(i_single) :: ifov
-    integer(i_single), dimension(6) :: dtime
-    real(r_double) :: olat, olon
-    real(r_double) :: terrain
-    real(r_double) :: lza, sza
-    real(r_double) :: sat_aziang, sol_aziang
-    real(r_double), dimension(:), allocatable :: bufrdata
+    integer(c_int) :: nchanl
+    integer(c_int) :: satid
+    integer(c_int) :: ifov
+    integer(c_int), dimension(6) :: dtime
+    real(c_double) :: olat, olon
+    real(c_double) :: terrain
+    real(c_double) :: lza, sza
+    real(c_double) :: sat_aziang, sol_aziang
+    type(c_ptr), dimension(1) :: bufr_data
   end type BufrData
+
+  contains
+
+    function c_to_f_string(s) result(str)
+      use iso_c_binding
+      implicit none
+
+      character(kind=c_char,len=1), intent(in) :: s(*)
+      character(len=:), allocatable :: str
+      integer nchars
+
+      nchars = 1
+      do while (s(nchars) .ne. c_null_char)
+         nchars = nchars + 1
+      end do
+
+      nchars = nchars - 1
+
+      allocate(character(len=nchars) :: str)
+
+      str = transfer(s(1:nchars), str)
+
+    end function c_to_f_string
+
 end module
 
 
@@ -55,33 +81,67 @@ subroutine count_messages(finput, nimsg, nirep)
 end subroutine count_messages
 
 
-! read data from a bufr file
-subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
+subroutine print_bufrdata(num_bdata, bdata_c_ptr) bind(C, name="print_bufrdata")
+  use iso_c_binding
   use bufr_tools
+  implicit none
 
-  character(len=*), intent(in) :: finput
-  integer, intent(in) :: nchanl
-  integer, intent(in) :: nimsg, nirep
-  type(BufrData), dimension(nirep), intent(out) :: bdata
+  integer(c_int), intent(in) :: num_bdata
+  type(c_ptr), dimension(1), intent(inout) :: bdata_c_ptr(*)
+
+  type(BufrData), pointer :: bdata_ptr(:)
+  real(c_double), pointer :: bufr_data_ptr(:)
+  integer :: msg_idx, data_idx
+
+  call c_f_pointer(bdata_c_ptr(1), bdata_ptr, [sizeof_bufrdata])
+  
+  do msg_idx = 1, num_bdata
+    call c_f_pointer(bdata_ptr(msg_idx)%bufr_data(1), bufr_data_ptr, [r_double])
+
+    do data_idx = 1, bdata_ptr(msg_idx)%nchanl
+      write(*, '(F7.2)', advance="NO"), bufr_data_ptr(data_idx)
+    end do
+    print *, ''
+
+    if (msg_idx .gt. 10) exit
+  end do
+end subroutine print_bufrdata
+
+
+! read data from a bufr file
+subroutine read_bufrdata(c_finput, nchanl, bdata_c_ptr) bind(C, name='read_bufrdata')
+  use iso_c_binding 
+  use bufr_tools
+  implicit none
+
+  character(kind=c_char, len=1), intent(in) :: c_finput
+  integer(c_int), intent(in) :: nchanl
+  type(c_ptr), intent(inout) :: bdata_c_ptr(*)
+
+  !Declare local variables that represent c types
+  character(len=255) :: finput
+  type(BufrData), pointer :: bdata_ptr(:)
+  real(c_double), pointer :: bdata_databufr_ptr(:)
 
   integer :: lunin = 10
   character(len=8) :: subset
-  integer(kind=i_single) :: ireadmg, ireadsb, idate
+  integer(i_single) :: ireadmg, ireadsb, idate
   integer :: iret
-
-  integer :: ichanl
   integer :: irep
-
   character(len=80) :: hdr1b
   character(len=80) :: hdr2b
   integer :: n1bhdr = 13
   integer :: n2bhdr = 4
   real(r_double), allocatable, dimension(:) :: bfr1bhdr, bfr2bhdr
-
   real(r_double) :: dlat, dlon, dlat_deg, dlon_deg, dlat_rad, dlon_rad
 
-  print *, 'AAA'
 
+  !initialize local variables from C types
+  finput = c_to_f_string(c_finput)
+  print *, "input file: ", finput
+  call c_f_pointer(bdata_c_ptr(1), bdata_ptr, [sizeof_bufrdata])
+
+  !initialize other variables
   hdr1b ='SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS'
   hdr2b ='SAZA SOZA BEARAZ SOLAZI'
 
@@ -91,32 +151,29 @@ subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
   open(lunin, file=trim(adjustl(finput)), status='old', form='unformatted')
   call openbf(lunin, 'IN', lunin)
 
-  print *, "B"
-
   irep = 0
   ireadmg_loop: do while(ireadmg(lunin, subset, idate) >= 0)
     ireadsb_loop: do while(ireadsb(lunin) == 0)
-
       irep = irep + 1
 
-      bdata(irep)%nchanl = nchanl
+      bdata_ptr(irep)%nchanl = nchanl
 
       ! Read header record
       call ufbint(lunin, bfr1bhdr, n1bhdr, 1, iret, hdr1b)
 
       ! Extract satellite id
-      bdata(irep)%satid = nint(bfr1bhdr(1))
+      bdata_ptr(irep)%satid = nint(bfr1bhdr(1))
 
       ! Extract field of view
-      bdata(irep)%ifov = nint(bfr1bhdr(2))
+      bdata_ptr(irep)%ifov = nint(bfr1bhdr(2))
 
       ! Extract date information
-      bdata(irep)%dtime(1) = bfr1bhdr(3) ! year
-      bdata(irep)%dtime(2) = bfr1bhdr(4) ! month
-      bdata(irep)%dtime(3) = bfr1bhdr(5) ! day
-      bdata(irep)%dtime(4) = bfr1bhdr(6) ! hour
-      bdata(irep)%dtime(5) = bfr1bhdr(7) ! minute
-      bdata(irep)%dtime(6) = bfr1bhdr(8) ! second
+      bdata_ptr(irep)%dtime(1) = nint(bfr1bhdr(3)) ! year
+      bdata_ptr(irep)%dtime(2) = nint(bfr1bhdr(4)) ! month
+      bdata_ptr(irep)%dtime(3) = nint(bfr1bhdr(5)) ! day
+      bdata_ptr(irep)%dtime(4) = nint(bfr1bhdr(6)) ! hour
+      bdata_ptr(irep)%dtime(5) = nint(bfr1bhdr(7)) ! minute
+      bdata_ptr(irep)%dtime(6) = nint(bfr1bhdr(8)) ! second
 
       ! Extract observation location (latitude and longitude)
       if (abs(bfr1bhdr(11)) <= 90.0_r_double .and. abs(bfr1bhdr(12)) <= 360.0_r_double) then
@@ -131,36 +188,34 @@ subroutine read_bufrdata(finput, nchanl, nimsg, nirep, bdata)
       dlat_deg = dlat           ; dlon_deg = dlon
       dlat_rad = dlat * deg2rad ; dlon_rad = dlon * deg2rad
 
-      bdata(irep)%olat = dlat_deg
-      bdata(irep)%olon = dlon_deg
+      bdata_ptr(irep)%olat = dlat_deg
+      bdata_ptr(irep)%olon = dlon_deg
 
       ! Extract terrain information
-      bdata(irep)%terrain = 0.01_r_double * abs(bfr1bhdr(13))
+      bdata_ptr(irep)%terrain = 0.01_r_double * abs(bfr1bhdr(13))
 
       call ufbint(lunin, bfr2bhdr, n2bhdr, 1, iret, hdr2b)
 
       ! Extract local zenith angle
-      bdata(irep)%lza = bfr2bhdr(1)
+      bdata_ptr(irep)%lza = bfr2bhdr(1)
 
       ! Extract solar zenith angle
-      bdata(irep)%sza = bfr2bhdr(2)
+      bdata_ptr(irep)%sza = bfr2bhdr(2)
 
       ! Extract local azimuth angle
-      bdata(irep)%sat_aziang = bfr2bhdr(3)
+      bdata_ptr(irep)%sat_aziang = bfr2bhdr(3)
 
       ! Extract solar azimuth angle
-      bdata(irep)%sol_aziang = bfr2bhdr(4)
+      bdata_ptr(irep)%sol_aziang = bfr2bhdr(4)
 
-      allocate(bdata(irep)%bufrdata(nchanl))
+      call c_f_pointer(bdata_ptr(irep)%bufr_data(1), bdata_databufr_ptr, [r_double])
 
       ! Read data record
       ! TMBR is actually the antenna temperature for most microwave sounders
-      call ufbrep(lunin, bdata(irep)%bufrdata, 1, bdata(irep)%nchanl, iret, 'TMBR')
+      call ufbrep(lunin, bdata_databufr_ptr, 1, bdata_ptr(irep)%nchanl, iret, 'TMBR')
 
     enddo ireadsb_loop
   enddo ireadmg_loop
-
-  print *, "C"
 
   call closbf(lunin)
   close(lunin)

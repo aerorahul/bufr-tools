@@ -13,23 +13,34 @@
 
 extern "C"
 {
-	void FORTRAN_FN_NAME(count_messages)(const char* finput, f_int* nimsg, f_int* nirep, f_int finput_len);
-	void FORTRAN_FN_NAME(read_bufrdata)(const char* finput, f_int* nchanl, f_int* nimsg, f_int* nirep, BufrData* bdata, f_int finput_len);
+  void FORTRAN_FN_NAME(count_messages)(const char* finput, f_int* nimsg, f_int* nirep, f_int finput_len);
+  void read_bufrdata(const char* finput, f_int* nchanl, BufrData** bdata);
+  void print_bufrdata(f_int* nirep, BufrData** bdata);
 }
 
 
 void count_messages(string filepath, f_int* num_messages, f_int* num_sections)
 {
-	FORTRAN_FN_NAME(count_messages)(filepath.c_str(), num_messages, num_sections, (f_int)filepath.length());
+  FORTRAN_FN_NAME(count_messages)(filepath.c_str(), num_messages, num_sections, (f_int)filepath.length());
 }
+
 
 BufrDataList read_bufrdata(string filepath, f_int num_channels, f_int num_msgs, f_int num_reps)
 {
-	BufrData* bufrData = new BufrData[num_reps];
-	FORTRAN_FN_NAME(read_bufrdata)(filepath.c_str(), &num_channels, &num_msgs, &num_reps, bufrData, (f_int)filepath.length());
 
-	cout << "Num Channels: " << num_channels << " Num Msgs: " << num_msgs << " Num Reps " << num_reps;
+  //Initialize memory for BufrData
+  BufrData* bufrData = new BufrData[num_reps];
+  for (unsigned int rep_idx = 0; rep_idx<num_reps; rep_idx++)
+  {
+    bufrData[rep_idx].nchanl = num_channels;
+    bufrData[rep_idx].bufr_data = new f_real[num_channels];
+  };
 
-	return BufrDataList();
+  cout << "C++ " << sizeof(BufrData) << endl;
+
+  read_bufrdata(filepath.c_str(), &num_channels, &bufrData);
+  print_bufrdata(&num_reps, &bufrData);
+
+  return BufrDataList();
 }
 

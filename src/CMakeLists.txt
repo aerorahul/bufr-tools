@@ -12,17 +12,17 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
 
 endif()
 
-# Subsetting application
-set(exe subset_bufr.x)
-set(srcs subset_bufr.f90)
-add_executable(${exe} ${srcs})
-list(APPEND EXE_TARGETS ${exe})
+# # Subsetting application
+# set(exe subset_bufr.x)
+# set(srcs subset_bufr.f90)
+# add_executable(${exe} ${srcs})
+# list(APPEND EXE_TARGETS ${exe})
 
-# Read application
-set(exe read_bufr.x)
-set(srcs read_bufr.f90 bufr_tools.f90)
-add_executable(${exe} ${srcs})
-list(APPEND EXE_TARGETS ${exe})
+# # Read application
+# set(exe read_bufr.x)
+# set(srcs read_bufr.f90 bufr_tools.f90)
+# add_executable(${exe} ${srcs})
+# list(APPEND EXE_TARGETS ${exe})
 
 # C++ test application
 add_definitions(-DFORTRAN_UNDERSCORE)
