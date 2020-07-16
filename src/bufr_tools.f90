@@ -81,12 +81,12 @@ subroutine count_messages(finput, nimsg, nirep)
 end subroutine count_messages
 
 
-subroutine print_bufrdata(num_bdata, bdata_c_ptr) bind(C, name="print_bufrdata")
+subroutine print_bufrdata(num_msgs, bdata_c_ptr) bind(C, name="print_bufrdata")
   use iso_c_binding
   use bufr_tools
   implicit none
 
-  integer(c_int), intent(in) :: num_bdata
+  integer(c_int), value, intent(in) :: num_msgs
   type(c_ptr), dimension(1), intent(inout) :: bdata_c_ptr(*)
 
   type(BufrData), pointer :: bdata_ptr(:)
@@ -95,15 +95,13 @@ subroutine print_bufrdata(num_bdata, bdata_c_ptr) bind(C, name="print_bufrdata")
 
   call c_f_pointer(bdata_c_ptr(1), bdata_ptr, [sizeof_bufrdata])
   
-  do msg_idx = 1, num_bdata
+  do msg_idx = 1, num_msgs
     call c_f_pointer(bdata_ptr(msg_idx)%bufr_data(1), bufr_data_ptr, [r_double])
 
     do data_idx = 1, bdata_ptr(msg_idx)%nchanl
-      write(*, '(F7.2)', advance="NO"), bufr_data_ptr(data_idx)
+      write(*, '(F7.2)', advance="NO") bufr_data_ptr(data_idx)
     end do
     print *, ''
-
-    if (msg_idx .gt. 10) exit
   end do
 end subroutine print_bufrdata
 
@@ -115,7 +113,7 @@ subroutine read_bufrdata(c_finput, nchanl, bdata_c_ptr) bind(C, name='read_bufrd
   implicit none
 
   character(kind=c_char, len=1), intent(in) :: c_finput
-  integer(c_int), intent(in) :: nchanl
+  integer(c_int), value, intent(in) :: nchanl
   type(c_ptr), intent(inout) :: bdata_c_ptr(*)
 
   !Declare local variables that represent c types
