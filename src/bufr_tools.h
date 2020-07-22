@@ -4,25 +4,21 @@
 
 using namespace std;
 
-typedef int f_int;
-typedef double f_real;
-
 
 typedef struct
 {
-	f_int nchanl;
-    f_int satid;
-    f_int ifov;
-    f_int dtime[6];
-    f_real olat, olon;
-    f_real terrain;
-    f_real lza, sza;
-    f_real sat_aziang, sol_aziang;
-    f_real* bufr_data;
+	int nchanl;
+    int satid;
+    int ifov;
+    int dtime[6];
+    double olat, olon;
+    double terrain;
+    double lza, sza;
+    double sat_aziang, sol_aziang;
+    double* bufr_data;
 }  BufrData;
 
-typedef vector<BufrData> BufrDataList;
 
-
-void count_messages(string filepath, f_int* num_messages, f_int* num_sections);
-BufrDataList read_bufrdata(string filepath, f_int num_channels, f_int num_messages, f_int num_reps);
+void count_messages(string filepath, int* num_messages, int* num_sections);
+BufrData* read_bufrdata(string filepath, int num_channels, int num_messages, int num_reps);
+void print_bufrdata(int num_msgs, BufrData* bdata);

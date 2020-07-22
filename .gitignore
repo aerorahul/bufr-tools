@@ -39,3 +39,5 @@
 # CMake directories
 build*/
 install*/
+CMakeFiles
+.vscode

@@ -34,7 +34,7 @@ module bufr_tools
 
       nchars = 1
       do while (s(nchars) .ne. c_null_char)
-         nchars = nchars + 1
+        nchars = nchars + 1
       end do
 
       nchars = nchars - 1
@@ -65,6 +65,7 @@ subroutine count_messages(finput, nimsg, nirep)
   ! Count the number of messages in the bufr file
   open(lunin, file=trim(adjustl(finput)), status='old', form='unformatted')
   call openbf(lunin, 'IN', lunin)
+
   do while(ireadmg(lunin, subset, idate) == 0)
     nimsg = nimsg + 1
     do while(ireadsb(lunin) == 0)

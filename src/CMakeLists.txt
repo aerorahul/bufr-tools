@@ -34,6 +34,12 @@ list(APPEND EXE_TARGETS ${exe})
 
 foreach(_tgt IN LISTS EXE_TARGETS)
   target_link_libraries(${_tgt} PRIVATE bufr::bufr_4_DA)
+  target_link_libraries(${_tgt} PUBLIC Eigen3::Eigen)
+
+  find_path(IODA_ENGINES_PATH ioda-engines)
+  target_include_directories(${_tgt} PRIVATE ${IODA_ENGINES_PATH}/ioda-engine/include)
+  find_library(IODA_ENGINES_LIB ioda-engines ${IODA_ENGINES_PATH}/ioda-engine/lib)
+  target_link_libraries(${_tgt} PRIVATE ${IODA_ENGINES_LIB})
 endforeach()
 
 install(TARGETS ${EXE_TARGETS} RUNTIME
