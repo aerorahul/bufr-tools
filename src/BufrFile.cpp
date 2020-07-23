@@ -66,16 +66,16 @@ void BufrFile::readData()
       Header_1* header1 = new Header_1;
       ufbint(FORTRAN_FILE_UNIT, (void**)&header1, HEADER_1_SIZE, 1, &result, HEADER_1_MNEMONIC);
 
-     report.nchanl = numChannels_;
-     report.satid = header1->satid;
-     report.ifov = header1->ifov;
+      report.nchanl = numChannels_;
+      report.satid = header1->satid;
+      report.ifov = header1->ifov;
 
-     report.dtime[0] = header1->year; //year
-     report.dtime[1] = header1->month; //month
-     report.dtime[2] = header1->day; //day
-     report.dtime[3] = header1->hour; //hour
-     report.dtime[4] = header1->minute; //minute
-     report.dtime[5] = header1->second; //second
+      report.dtime[0] = header1->year; //year
+      report.dtime[1] = header1->month; //month
+      report.dtime[2] = header1->day; //day
+      report.dtime[3] = header1->hour; //hour
+      report.dtime[4] = header1->minute; //minute
+      report.dtime[5] = header1->second; //second
 
       double lat;
       double lon;
@@ -93,31 +93,32 @@ void BufrFile::readData()
       if (lon < 0) lon = lon + 360;
       if (lon >= 360) lon = lon - 360;
 
-     report.olat = lat;
-     report.olon = lon;
+      report.olat = lat;
+      report.olon = lon;
 
-     report.terrain = 0.01 * abs(header1->terrain);
+      report.terrain = 0.01 * abs(header1->terrain);
 
       free(header1);
 
       //Read header 2 data
       Header_2* header2 = new Header_2;
+
       ufbint(FORTRAN_FILE_UNIT, (void**)&header2, HEADER_2_SIZE, 1, &result, HEADER_2_MNEMONIC);
 
-     report.lza = header2->lza;
-     report.sza = header2->sza;
-     report.sat_aziang = header2->sat_aziang;
-     report.sol_aziang = header2->sol_aziang;
+      report.lza = header2->lza;
+      report.sza = header2->sza;
+      report.sat_aziang = header2->sat_aziang;
+      report.sol_aziang = header2->sol_aziang;
 
       free(header2);
 
       //Read bufr data
       double* tmbr_data = new double[numChannels_];
       ufbrep(FORTRAN_FILE_UNIT, (void**)&tmbr_data, 1, numChannels_, &result, "TMBR");
-     report.bufr_data.reset(tmbr_data);
+      report.bufr_data.reset(tmbr_data);
 
-      //Store the result
-     reports_.push_back(report);
+      //Save the result
+      reports_.push_back(report);
     }
   } 
 
@@ -166,7 +167,6 @@ void BufrFile::printData(int maxLinesToPrint)
       {
         cout << setw(7)  << report.bufr_data.get()[channel_idx] << " ";
       }
-
       cout << endl;
 
       if (maxLinesToPrint > 0 && ++idx >= maxLinesToPrint) break;

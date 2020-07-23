@@ -30,9 +30,8 @@ namespace BufrTools
     public: 
         BufrFile(string filepath, unsigned int numChannels);
         void readData();
-        void printData(int nunElements=-1);
+        void printData(int numElements=-1);
         void countMessages();
         Reports getReports();
-        
     };
 }

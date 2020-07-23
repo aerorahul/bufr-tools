@@ -26,9 +26,9 @@ add_executable(${exe} ${srcs})
 
 target_include_directories(${exe} PRIVATE ${bufrlib_c_dir})
 
-# target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
-# find_path(IODA_ENGINES_PATH ioda-engines)
+target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
 
+# find_path(IODA_ENGINES_PATH ioda-engines)
 set (IODA_ENGINES_PATH ${CMAKE_PREFIX_PATH})
 target_include_directories(${exe} PRIVATE ${IODA_ENGINES_PATH}/ioda-engine/include)
 
