@@ -1,0 +1,3 @@
+[submodule "deps/NCEPLIBS-bufr"]
+	path = deps/NCEPLIBS-bufr
+	url = https://github.com/rmclaren/NCEPLIBS-bufr.git
