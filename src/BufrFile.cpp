@@ -34,7 +34,7 @@ typedef struct
   double sol_aziang;
 }  Header_2;
 
-static const int FORTRAN_FILE_UNIT = 10;
+static const int FORTRAN_FILE_UNIT = 11;
 static const char* HEADER_1_MNEMONIC = "SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS";
 static const char* HEADER_2_MNEMONIC = "SAZA SOZA BEARAZ SOLAZI";
 
