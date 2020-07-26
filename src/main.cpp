@@ -12,8 +12,8 @@ using namespace std;
 using namespace BufrTools;
 using namespace ioda;
 
-const string INPUT_FILE = "/Users/rmclaren/Work/sample-bufr-data/gdas/gdas.20200704/12/gdas.t12z.1bhrs4.tm00.bufr_d";
-const string OUTPUT_FILE = "/Users/rmclaren/Temp/ioda.out";
+const string INPUT_FILE = "/Users/rmclaren/Work/sample-bufr-data/gdas/gdas.20200704/12/gdas.t12z.1bmhs.tm00.bufr_d";
+const string OUTPUT_FILE = "/Users/rmclaren/Temp/ioda.nc";
 
 
 ObsGroup createObsGroup(Reports reports, int numChannels)
@@ -21,11 +21,17 @@ ObsGroup createObsGroup(Reports reports, int numChannels)
   std::vector<int> nChans(numChannels);
 	std::iota(nChans.begin(), nChans.end(), 1);
 
+  std::vector<int> nreports(reports.size());
+	std::iota(nreports.begin(), nreports.end(), 1);
+
   string file_output = "/Users/rmclaren/Temp/obsgroup.dat";
 
   ObsGroup og = ObsGroup::createObsGroupFile(OUTPUT_FILE, true);
   og.createDimScale("nchans", nChans);
+  og.createDimScale("nreports", nreports, true);
+
 	Variable nchans_var = og.openDimScale("nchans");
+  Variable nreports_var = og.openDimScale("nreports");
 
   VariableCreationParameters float_params = og.initVarCreateParams<float>(-999);
 
@@ -60,6 +66,7 @@ ObsGroup createObsGroup(Reports reports, int numChannels)
   for (unsigned int rpt_idx=0; rpt_idx < reports.size(); rpt_idx++)
   {
     lats[rpt_idx] = reports[rpt_idx].olat;
+
     lons[rpt_idx] = reports[rpt_idx].olon;
 
     //This is not efficient, should be creating eigen array from memory buffer.
@@ -88,7 +95,6 @@ int main(int argc, const char** argv)
   clock_t tStart = clock();
   bufrFile.readData();
   printf("Time to read: %.2fs\n\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-
   
   bufrFile.printData(10);
 
