@@ -66,13 +66,12 @@ ObsGroup createObsGroup(Reports reports, int numChannels)
   for (unsigned int rpt_idx=0; rpt_idx < reports.size(); rpt_idx++)
   {
     lats[rpt_idx] = reports[rpt_idx].olat;
-
     lons[rpt_idx] = reports[rpt_idx].olon;
 
     //This is not efficient, should be creating eigen array from memory buffer.
     //Creating a vector of Reports was a mistake.
     double* data_bufr = reports[rpt_idx].bufr_data.get();
-    for (unsigned int channel_idx; channel_idx < numChannels; channel_idx++)
+    for (unsigned int channel_idx = 0; channel_idx < numChannels; channel_idx++)
     {
       bufrData(rpt_idx, channel_idx) = data_bufr[channel_idx];
     }
