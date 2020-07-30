@@ -21,33 +21,33 @@ ObsGroup createObsGroup(Reports reports, int numChannels)
   std::vector<int> nChans(numChannels);
 	std::iota(nChans.begin(), nChans.end(), 1);
 
-  std::vector<int> nreports(reports.size());
-	std::iota(nreports.begin(), nreports.end(), 1);
+  std::vector<int> nlocs(reports.size());
+	std::iota(nlocs.begin(), nlocs.end(), 1);
 
   string file_output = "/Users/rmclaren/Temp/obsgroup.dat";
 
   ObsGroup og = ObsGroup::createObsGroupFile(OUTPUT_FILE, true);
   og.createDimScale("nchans", nChans);
-  og.createDimScale("nreports", nreports, true);
+  og.createDimScale("nlocs", nlocs, true);
 
 	Variable nchans_var = og.openDimScale("nchans");
-  Variable nreports_var = og.openDimScale("nreports");
+  Variable nlocs_var = og.openDimScale("nlocs");
 
   VariableCreationParameters float_params = og.initVarCreateParams<float>(-999);
 
-	Variable obs_var = og.createDbVar("ObsValue", "myObs", typeid(float), { "nreports", "nchans" }, float_params);
+	Variable obs_var = og.createDbVar("ObsValue", "myObs", typeid(float), { "nlocs", "nchans" }, float_params);
 
-  og.createDbVar("MetaData", "latitude", typeid(float), { "nreports" }, float_params);
+  og.createDbVar("MetaData", "latitude", typeid(float), { "nlocs" }, float_params);
 	Variable lat_var = og.openDbVar("MetaData", "latitude");
 
-	og.createDbVar("MetaData", "longitude", typeid(float), { "nreports" }, float_params);
+	og.createDbVar("MetaData", "longitude", typeid(float), { "nlocs" }, float_params);
 	Variable lon_var = og.openDbVar("MetaData", "longitude");
 
   obs_var.atts
-		.add<std::string>("coordinates", { "MetaData/longitude MetaData/latitude nchans" }, { 1 })
+		.add<std::string>("coordinates", { "longitude latitude nchans" }, { 1 })
 		.add<std::string>("long_name", { "obs I made up" }, { 1 })
 		.add<std::string>("units", { "K" }, { 1 })
-		.add<float>("valid_range", { 0.0, 50.0 }, { 2 });
+		.add<float>("valid_range", { 0.0, 500.0 }, { 2 });
 
   lat_var.atts
 		.add<std::string>("long_name", { "latitude" }, { 1 })
