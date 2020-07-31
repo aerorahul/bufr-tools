@@ -27,10 +27,14 @@ if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU)$")
     WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}")
 endif()
 
+set(jedi_DIR ${CMAKE_PREFIX_PATH}/ioda_engines/lib/cmake/jedi)
+
 find_package(bufr REQUIRED)
 find_package( Eigen3 REQUIRED NO_MODULE HINTS
               $ENV{Eigen3_ROOT} $ENV{EIGEN3_ROOT} $ENV{Eigen_ROOT} $ENV{EIGEN_ROOT}
               $ENV{Eigen3_PATH} $ENV{EIGEN3_PATH} $ENV{Eigen_PATH} $ENV{EIGEN_PATH} )
+find_package(jedi REQUIRED)
+find_package(ioda_engines REQUIRED)
 
 add_subdirectory(src)
 # add_subdirectory(deps/NCEPLIBS-bufr)

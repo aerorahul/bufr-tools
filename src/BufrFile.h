@@ -2,13 +2,13 @@
 #include <string>
 #include <memory>
 
-namespace BufrTools
+namespace BufrParser
 {
     using namespace std;
 
     typedef struct
     {
-        int nchanl;
+        unsigned int nchanl;
         int satid;
         int ifov;
         int dtime[6];
@@ -32,6 +32,6 @@ namespace BufrTools
         void readData();
         void printData(int numElements=-1);
         void countMessages();
-        Reports getReports();
+        inline Reports getReports() { return reports_; }
     };
 }

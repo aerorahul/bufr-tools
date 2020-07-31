@@ -3,9 +3,9 @@
 #include <iomanip>
 
 #include "BufrFile.h"
-#include "bufrlib_c_wrapper.h"
+#include "bufr.interface.h"
 
-using namespace BufrTools;
+using namespace BufrParser;
 using namespace std;
 
 
@@ -49,36 +49,37 @@ void BufrFile::readData()
   const int HEADER_1_SIZE = sizeof(Header_1)/sizeof(double);
   const int HEADER_2_SIZE = sizeof(Header_2)/sizeof(double);
 
-  open_fortran_file(FORTRAN_FILE_UNIT, filepath_.c_str());
-  open_bufr(FORTRAN_FILE_UNIT, "IN", FORTRAN_FILE_UNIT);
+  open_f(FORTRAN_FILE_UNIT, filepath_.c_str());
+  openbf_f(FORTRAN_FILE_UNIT, "IN", FORTRAN_FILE_UNIT);
 
-  char* subset;
+  char subset[25];
   int iddate;
   int result;
 
-  while (read_next_msg(FORTRAN_FILE_UNIT, subset, &iddate) == 0)
+
+  while (ireadmg_f(FORTRAN_FILE_UNIT, subset, &iddate, 25) == 0)
   {
-    while (read_next_subset(FORTRAN_FILE_UNIT) == 0)
+    while (ireadsb_f(FORTRAN_FILE_UNIT) == 0)
     {
       Report report;
 
       //Read header 1 data
-      Header_1* header1 = new Header_1;
-      ufbint(FORTRAN_FILE_UNIT, (void**)&header1, HEADER_1_SIZE, 1, &result, HEADER_1_MNEMONIC);
+      auto* header1 = new Header_1;
+      ufbint_f(FORTRAN_FILE_UNIT, (void**)&header1, HEADER_1_SIZE, 1, &result, HEADER_1_MNEMONIC);
 
       report.nchanl = numChannels_;
-      report.satid = header1->satid;
-      report.ifov = header1->ifov;
+      report.satid = (int)header1->satid;
+      report.ifov = (int)header1->ifov;
 
-      report.dtime[0] = header1->year; //year
-      report.dtime[1] = header1->month; //month
-      report.dtime[2] = header1->day; //day
-      report.dtime[3] = header1->hour; //hour
-      report.dtime[4] = header1->minute; //minute
-      report.dtime[5] = header1->second; //second
+      report.dtime[0] = (int)header1->year; //year
+      report.dtime[1] = (int)header1->month; //month
+      report.dtime[2] = (int)header1->day; //day
+      report.dtime[3] = (int)header1->hour; //hour
+      report.dtime[4] = (int)header1->minute; //minute
+      report.dtime[5] = (int)header1->second; //second
 
-      double lat;
-      double lon;
+      double lat = 0;
+      double lon = 0;
       if (abs(header1->clath) <= 90 && abs(header1->clonh) <= 360)
       {
         lat = header1->clath;
@@ -101,9 +102,9 @@ void BufrFile::readData()
       free(header1);
 
       //Read header 2 data
-      Header_2* header2 = new Header_2;
+      auto* header2 = new Header_2;
 
-      ufbint(FORTRAN_FILE_UNIT, (void**)&header2, HEADER_2_SIZE, 1, &result, HEADER_2_MNEMONIC);
+      ufbrep_f(FORTRAN_FILE_UNIT, (void**)&header2, HEADER_2_SIZE, 1, &result, HEADER_2_MNEMONIC);
 
       report.lza = header2->lza;
       report.sza = header2->sza;
@@ -114,7 +115,7 @@ void BufrFile::readData()
 
       //Read bufr data
       double* tmbr_data = new double[numChannels_];
-      ufbrep(FORTRAN_FILE_UNIT, (void**)&tmbr_data, 1, numChannels_, &result, "TMBR");
+      ufbrep_f(FORTRAN_FILE_UNIT, (void**)&tmbr_data, 1, numChannels_, &result, "TMBR");
       report.bufr_data.reset(tmbr_data);
 
       //Save the result
@@ -122,33 +123,32 @@ void BufrFile::readData()
     }
   } 
 
-  close_bufr(FORTRAN_FILE_UNIT);
-  close_fortran_file(FORTRAN_FILE_UNIT);
+  closbf_f(FORTRAN_FILE_UNIT);
+  close_f(FORTRAN_FILE_UNIT);
 }
-
 
 void BufrFile::countMessages()
 {
-  open_fortran_file(FORTRAN_FILE_UNIT, filepath_.c_str());
-  open_bufr(FORTRAN_FILE_UNIT, "IN", FORTRAN_FILE_UNIT);
+  open_f(FORTRAN_FILE_UNIT, filepath_.c_str());
+  openbf_f(FORTRAN_FILE_UNIT, "IN", FORTRAN_FILE_UNIT);
 
   int num_msgs = 0;
   int num_reports = 0;
 
-  char* subset;
-  int iddate, result;
-  while (read_next_msg(FORTRAN_FILE_UNIT, subset, &iddate) == 0)
+  char subset[25];
+  int iddate;
+  while (ireadmg_f(FORTRAN_FILE_UNIT, subset, &iddate, 25) == 0)
   {
       num_msgs++;
 
-      while (read_next_subset(FORTRAN_FILE_UNIT) == 0)
+      while (ireadsb_f(FORTRAN_FILE_UNIT) == 0)
       {
           num_reports++;
       }
   } 
 
-  close_bufr(FORTRAN_FILE_UNIT);
-  close_fortran_file(FORTRAN_FILE_UNIT);
+  closbf_f(FORTRAN_FILE_UNIT);
+  close_f(FORTRAN_FILE_UNIT);
 
   cout << filepath_ << endl;
   cout << "contains " << num_msgs << " messages and " << num_reports << " reports." << endl;
@@ -157,13 +157,13 @@ void BufrFile::countMessages()
 
 void BufrFile::printData(int maxLinesToPrint)
 {
-  if  (reports_.size() > 0)
+  if  (!reports_.empty())
   {
     int idx = 0;
     cout.precision(5);
-    for (auto report : reports_)
+    for (const auto& report : reports_)
     {
-      for (int channel_idx = 0; channel_idx < report.nchanl; channel_idx++)
+      for (unsigned int channel_idx = 0; channel_idx < report.nchanl; channel_idx++)
       {
         cout << setw(7)  << report.bufr_data.get()[channel_idx] << " ";
       }
@@ -176,9 +176,4 @@ void BufrFile::printData(int maxLinesToPrint)
   {
     cout << "No BUFR data to print. Do you need to call read?" << endl;
   }
-}
-
-Reports BufrFile::getReports()
-{
-  return reports_;
 }

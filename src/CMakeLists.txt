@@ -1,3 +1,4 @@
+
 if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
 
   set(CMAKE_Fortran_FLAGS "-g -traceback")
@@ -9,38 +10,31 @@ elseif(CMAKE_C_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
   set(CMAKE_Fortran_FLAGS "-g -fbacktrace")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
   set(CMAKE_Fortran_FLAGS_DEBUG "-ggdb -Wall -O0")
-
+  set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Wextra")
 endif()
 
-# C++ test application
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
 
-set(exe read_bufr)
-set (bufrlib_c_dir ${CMAKE_SOURCE_DIR}/deps/NCEPLIBS-bufr/c_wrapper)
+set(INGESTER_TEST "ingester_test")
+set(READ_BUFR_TEST "read_bufr_test")
 
-set(srcs 
-    main.cpp 
-    BufrFile.cpp
-    ${bufrlib_c_dir}/bufrlib_c_wrapper.f90)
+LIST(APPEND exes
+        ${INGESTER_TEST}
+        ${READ_BUFR_TEST})
 
-add_executable(${exe} ${srcs})
+add_subdirectory(Ingester)
 
-target_include_directories(${exe} PRIVATE ${bufrlib_c_dir})
+add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS})
+add_executable(${READ_BUFR_TEST} test_read_bufr.cpp BufrFile.cpp)
 
-target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
+foreach(exe ${exes})
+  target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
+  target_link_libraries(${exe} PRIVATE bufr::bufr_4_DA)
+  target_link_libraries(${exe} PRIVATE ioda::ioda-engines)
+endforeach()
 
-# find_path(IODA_ENGINES_PATH ioda-engines)
-set (IODA_ENGINES_PATH ${CMAKE_PREFIX_PATH})
-target_include_directories(${exe} PRIVATE ${IODA_ENGINES_PATH}/ioda-engine/include)
-
-find_library(IODA_ENGINES_LIB ioda-engines ${IODA_ENGINES_PATH}/ioda-engine/lib)
-target_link_libraries(${exe} PRIVATE ${IODA_ENGINES_LIB})
-
-target_link_libraries(${exe} PRIVATE bufr::bufr_4_DA)
-list(APPEND EXE_TARGETS ${exe})
-
-
-install(TARGETS ${EXE_TARGETS} RUNTIME
-        DESTINATION bin
-        COMPONENT utilities)
+#install(TARGETS ${EXE_TARGETS} RUNTIME
+#        DESTINATION bin
+#        COMPONENT utilities)
 
 

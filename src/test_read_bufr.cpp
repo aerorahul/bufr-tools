@@ -9,14 +9,14 @@
 
 
 using namespace std;
-using namespace BufrTools;
+using namespace BufrParser;
 using namespace ioda;
 
 const string INPUT_FILE = "/Users/rmclaren/Work/sample-bufr-data/gdas/gdas.20200704/12/gdas.t12z.1bmhs.tm00.bufr_d";
 const string OUTPUT_FILE = "/Users/rmclaren/Temp/ioda.nc";
 
 
-ObsGroup createObsGroup(Reports reports, int numChannels)
+ObsGroup createObsGroup(Reports reports, unsigned int numChannels)
 {
   std::vector<int> nChans(numChannels);
 	std::iota(nChans.begin(), nChans.end(), 1);
