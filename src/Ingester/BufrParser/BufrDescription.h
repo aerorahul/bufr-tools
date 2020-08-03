@@ -13,12 +13,10 @@ namespace Ingester
     {
     public: 
         BufrDescription();
-        void addMnemonicSet(MnemonicSet mnemonicSet);
-        vector<MnemonicSet> getMnemonicSet();
+        void addMnemonicSet(MnemonicSet& mnemonicSet);
+        inline vector<MnemonicSet> getMnemonicSets() { return mnemonicSets_; }
 
     private:
         vector<MnemonicSet> mnemonicSets_;
-
-        vector<string> tokenizeMnemonics(string mnemonics);
     };
 }

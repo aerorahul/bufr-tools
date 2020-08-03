@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <sstream>
 #include <iterator>
 
@@ -9,16 +8,17 @@
 using namespace Ingester;
 using namespace std;
 
-MnemonicSet::MnemonicSet(const string nmemonics, const size_t elementSize) :
+MnemonicSet::MnemonicSet(const string nmemonicsStr, const size_t elementSize) :
+    mnemonicsStr_(nmemonicsStr),
     elementSize_(elementSize)
 {
-    mnemonics_ = tokenizeMnemonics(nmemonics);
+    mnemonics_ = tokenizeMnemonics(nmemonicsStr);
 }
 
-vector<string> MnemonicSet::tokenizeMnemonics(const string mnemonics)
+vector<string> MnemonicSet::tokenizeMnemonics(const string& nmemonicsStr)
 {
     //Tokenize the string into individual mnemonic strings
-    istringstream buf(mnemonics);
+    istringstream buf(nmemonicsStr);
     istream_iterator<string> beg(buf), end;
     vector<string> tokens(beg, end);
     return tokens;

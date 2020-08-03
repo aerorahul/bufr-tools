@@ -116,6 +116,7 @@ void BufrFile::readData()
       //Read bufr data
       double* tmbr_data = new double[numChannels_];
       ufbrep_f(FORTRAN_FILE_UNIT, (void**)&tmbr_data, 1, numChannels_, &result, "TMBR");
+
       report.bufr_data.reset(tmbr_data);
 
       //Save the result

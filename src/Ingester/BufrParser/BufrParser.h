@@ -3,28 +3,23 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <map>
+#include "BufrDescription.h"
 
 namespace Ingester
 {
     using namespace std;
 
     class MnemonicSet;
-    class BufrDescription
+    class IngesterData;
     
     class BufrParser
     {
-        const string filepath_;
-        const unsigned int numChannels_; 
-        std::vector<ParameterSet> parameterSets_;
+    public:
+        explicit BufrParser(BufrDescription& description);
+        void parse(const string& filepath);
 
-    public: 
-        BufrFile(string filepath, unsigned int numChannels);
-        void addParameterSet(MnemonicSet parameterSet);
-
-
-        void readData();
-        void printData(int numElements=-1);
-        void countMessages();
-        // Reports getReports();
+    private:
+        BufrDescription description_;
     };
 }

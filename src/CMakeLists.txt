@@ -24,7 +24,7 @@ LIST(APPEND exes
 
 add_subdirectory(Ingester)
 
-add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS})
+add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS} Ingester/IodaEncoder/IodaEncoder.cpp Ingester/IodaEncoder/IodaEncoder.h)
 add_executable(${READ_BUFR_TEST} test_read_bufr.cpp BufrFile.cpp)
 
 foreach(exe ${exes})

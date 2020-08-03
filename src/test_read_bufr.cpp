@@ -94,7 +94,7 @@ int main(int argc, const char** argv)
   clock_t tStart = clock();
   bufrFile.readData();
   printf("Time to read: %.2fs\n\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
-  
+
   bufrFile.printData(10);
 
   //Generate IODA Engines ObsSpace

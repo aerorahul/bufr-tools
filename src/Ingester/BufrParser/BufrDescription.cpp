@@ -6,22 +6,9 @@
 using namespace Ingester;
 using namespace std;
 
-BufrDescription::BufrDescription()
+BufrDescription::BufrDescription() = default;
+
+void BufrDescription::addMnemonicSet(MnemonicSet& mnemonicSet)
 {
-
-}
-
-void BufrDescription::addMnemonicSet(MnemonicSet mnemonicSet)
-{
-
-}
-
-vector<MnemonicSet> BufrDescription::getMnemonicSet()
-{
-    return vector<MnemonicSet>();
-}
-
-vector<string> BufrDescription::tokenizeMnemonics(string mnemonics)
-{
-    return vector<string>();
+    mnemonicSets_.push_back(mnemonicSet);
 }
