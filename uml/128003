@@ -1,6 +1,6 @@
 format 222
 "Bufr Parser" // Ingester::Bufr Parser
-  revision 2
+  revision 3
   modified_by 3 "rmclaren"
   // class settings
   
@@ -137,12 +137,12 @@ ${inlines}
 	  b parent class_ref 128003 // BufrParser
       end
 
-      classrelation 129923 // <directional aggregation>
-	relation 129923 o-->
+      classrelation 129923 // <directional composition>
+	relation 129923 *-->
 	  a role_name "" multiplicity "1" private
-	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 129923 // <directional aggregation>
+	    classrelation_ref 129923 // <directional composition>
 	  b parent class_ref 135427 // BufrDescription
       end
 
@@ -304,33 +304,6 @@ ${inlines}
 	
       end
 
-      operation 129411 "addMnemonicTransform"
-	public explicit_return_type ""
-	nparams 1
-	  param in name "nemonicTransform" explicit_type "NmemonicTransform"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-	
-      end
-
-      attribute 128643 "nmemonicTransforms"
-	private explicit_type "vector<NmemonicTransform>"
-	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
       attribute 128771 "nmemonicSets"
 	private explicit_type "vector<NmemonicSet>"
 	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
@@ -341,34 +314,6 @@ ${inlines}
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
-      end
-
-      attribute 129155 "nmemonicSubstitutions"
-	private explicit_type "map<string, string>"
-	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	mysql_decl ""
-	MysqlColumn
-      end
-
-      operation 130435 "addNmemonicSubstitution"
-	public explicit_return_type ""
-	nparams 2
-	  param in name "nmemonic" explicit_type "string"
-	  param in name "substitution" explicit_type "string"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-	
       end
 
       operation 130179 "parseYamlFile"
@@ -385,7 +330,6 @@ ${inlines}
 	
 	
       end
-
     end
   end
 

@@ -6,7 +6,7 @@ classcanvas 128003 class_ref 128003 // BufrParser
 end
 classcanvas 128131 class_ref 134531 // NmemonicSet
   classdiagramsettings member_max_width 0 end
-  xyz 501 314 2000
+  xyz 462 390 2000
 end
 classcanvas 130179 class_ref 135171 // IngesterData
   classdiagramsettings member_max_width 0 end
@@ -19,7 +19,7 @@ classcanvas 130435 class_ref 135299 // ArrayXXf
 end
 classcanvas 131331 class_ref 135427 // BufrDescription
   classdiagramsettings member_max_width 0 end
-  xyz 506 106 2000
+  xyz 507 124 2000
 end
 classcanvas 132355 class_ref 135555 // bufr.interface
   classdiagramsettings hide_attributes yes hide_operations yes hide_getset_operations yes hide_ports yes show_members_full_definition no show_members_visibility no show_members_initialization no show_attribute_modifiers no member_max_width 0 end
@@ -40,13 +40,13 @@ end
 relationcanvas 131459 relation_ref 129539 // <directional composition>
   from ref 131331 z 2001 to ref 128131
   no_role_a no_role_b
-  multiplicity_a_pos 648 300 3000 no_multiplicity_b
+  multiplicity_a_pos 609 376 3000 no_multiplicity_b
 end
-relationcanvas 132099 relation_ref 129923 // <directional aggregation>
+relationcanvas 132099 relation_ref 129923 // <directional composition>
   from ref 128003 z 2001 to point 389 167
   line 132227 z 2001 to ref 131331
   no_role_a no_role_b
-  multiplicity_a_pos 489 174 3000 no_multiplicity_b
+  multiplicity_a_pos 490 172 3000 no_multiplicity_b
 end
 relationcanvas 132483 relation_ref 130051 // <dependency>
   from ref 128003 z 2001 to ref 132355
