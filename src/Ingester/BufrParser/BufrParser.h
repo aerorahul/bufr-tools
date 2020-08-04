@@ -4,6 +4,9 @@
 #include <string>
 #include <memory>
 #include <map>
+
+#include "Eigen/Dense"
+
 #include "BufrDescription.h"
 
 namespace Ingester
@@ -17,7 +20,7 @@ namespace Ingester
     {
     public:
         explicit BufrParser(BufrDescription& description);
-        void parse(const string& filepath);
+        shared_ptr<IngesterData> parse(const string& filepath, const unsigned int messagesToParse=0);
 
     private:
         BufrDescription description_;

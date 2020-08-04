@@ -23,6 +23,7 @@ LIST(APPEND exes
         ${READ_BUFR_TEST})
 
 add_subdirectory(Ingester)
+include_directories(Ingester)
 
 add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS} Ingester/IodaEncoder/IodaEncoder.cpp Ingester/IodaEncoder/IodaEncoder.h)
 add_executable(${READ_BUFR_TEST} test_read_bufr.cpp BufrFile.cpp)

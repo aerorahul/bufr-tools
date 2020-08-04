@@ -1,14 +1,28 @@
+#include <iostream>
+#include <utility>
 
 #include "IngesterData.h"
 
-#include <utility>
 
-Eigen::ArrayXXf Ingester::IngesterData::get(string& fieldName)
+using namespace Ingester;
+
+void IngesterData::add(const string& fieldName, IngesterArray data)
 {
-    return data_[fieldName];
+    if (dataMap_.find(fieldName) != dataMap_.end())
+    {
+        cout << "WARNING: Adding duplicate field called " << fieldName << endl;
+    }
+
+    dataMap_.insert({fieldName, data});
 }
 
-void Ingester::IngesterData::add(string& fieldName, Eigen::ArrayXXf data)
+IngesterArray IngesterData::get(const string& fieldName)
 {
-    data_[fieldName] = std::move(data);
+    if (dataMap_.find(fieldName) == dataMap_.end())
+    {
+        cout << "ERROR: Field called " << fieldName << " doesn't exist."<< endl;
+        abort();
+    }
+
+    return dataMap_[fieldName];
 }

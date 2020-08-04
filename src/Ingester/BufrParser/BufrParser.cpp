@@ -5,7 +5,7 @@
 
 #include "BufrParser.h"
 #include "MnemonicSet.h"
-//#include "IngesterData.h"
+#include "IngesterData.h"
 #include "bufr.interface.h"
 
 
@@ -16,19 +16,9 @@ static const int FORTRAN_FILE_UNIT = 11;
 static const unsigned int SUBSET_STR_LEN = 25;
 
 
-
-class Accumulator
-{
-public:
-    Accumulator() = default;
-
-private:
-};
-
 typedef string Mnemonics;
 typedef string Mnemonic;
-typedef ArrayXd ArrayType;
-typedef vector<ArrayType> DataVector;
+typedef vector<IngesterArray> DataVector;
 typedef map<Mnemonic, DataVector> MnemonicData;
 typedef map<Mnemonics, MnemonicData> DataMap;
 
@@ -38,7 +28,7 @@ BufrParser::BufrParser(BufrDescription& description) :
 {
 }
 
-void BufrParser::parse(const string& filepath)
+shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigned int messagesToParse)
 {
 //    auto data = shared_ptr<IngesterData>();
 
@@ -47,8 +37,6 @@ void BufrParser::parse(const string& filepath)
 
     char subset[SUBSET_STR_LEN];
     int iddate;
-
-    vector<string> testVec;
 
     DataMap dataMap;
     for (const auto& mnemonicSet : description_.getMnemonicSets())
@@ -62,6 +50,7 @@ void BufrParser::parse(const string& filepath)
         dataMap.insert({mnemonicSet.getMnemonicStr(), mnemonicData});
     }
 
+    unsigned int messageNum = 0;
     while (ireadmg_f(FORTRAN_FILE_UNIT, subset, &iddate, SUBSET_STR_LEN) == 0)
     {
         while (ireadsb_f(FORTRAN_FILE_UNIT) == 0)
@@ -89,23 +78,50 @@ void BufrParser::parse(const string& filepath)
                              &result,
                              mnemonicSet.getMnemonicStr().c_str());
                 }
-
+                ;
+                unsigned int offset = 0;
                 for (const auto& mnemonic : mnemonicSet.getMnemonics())
                 {
-                    DataVector* dataVector = &(dataMap[mnemonicSet.getMnemonicStr()][mnemonic]);
-                    ArrayType arr = Map<ArrayType>(sbData, mnemonicSet.getElementSize());
+                    DataVector *dataVector = &(dataMap[mnemonicSet.getMnemonicStr()][mnemonic]);
+                    IngesterArray arr = Map<IngesterArray>(sbData + offset, 1, mnemonicSet.getElementSize());
                     dataVector->push_back(arr);
+
+                    offset += mnemonicSet.getElementSize();
                 }
 
                 delete[] sbData;
             }
         }
+
+        messageNum++;
+
+        if (messagesToParse > 0 && messageNum >= messagesToParse) break;
     }
 
     closbf_f(FORTRAN_FILE_UNIT);
     close_f(FORTRAN_FILE_UNIT);
 
-    
+    auto ingesterData = make_shared<IngesterData>();
+    for (const auto& mnemonicSet : description_.getMnemonicSets())
+    {
+        for (const auto& mnemonic : mnemonicSet.getMnemonics())
+        {
+            DataVector* dataVector = &(dataMap[mnemonicSet.getMnemonicStr()][mnemonic]);
+            IngesterArray resArr(dataVector->size(), mnemonicSet.getElementSize());
+
+            unsigned int rowIdx = 0;
+            for (const auto& rowArr : *dataVector)
+            {
+                resArr.row(rowIdx) << rowArr.row(0);
+                rowIdx++;
+            }
+
+            ingesterData->add(mnemonic, resArr);
+        }
+    }
+
+    return ingesterData;
+
 
 //    return dataMap;
 }

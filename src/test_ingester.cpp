@@ -1,8 +1,12 @@
+#include <iostream>
+
 #include "Ingester/BufrParser/BufrParser.h"
 #include "Ingester/BufrParser/BufrDescription.h"
 #include "Ingester/BufrParser/MnemonicSet.h"
+#include "Ingester/IngesterData.h"
 
 using namespace Ingester;
+using namespace std;
 
 
 static const string INPUT_FILE = "/Users/rmclaren/Work/sample-bufr-data/gdas/gdas.20200704/12/gdas.t12z.1bmhs.tm00.bufr_d";
@@ -21,7 +25,9 @@ int main(int argc, const char** argv)
     description.addMnemonicSet(set3);
 
     auto bufrParser = BufrParser(description);
-    bufrParser.parse(INPUT_FILE);
+    auto data = bufrParser.parse(INPUT_FILE, 5);
+
+    cout << data->get("TMBR") << endl;
 
   return 0;
 }
