@@ -16,17 +16,14 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
 
 set(INGESTER_TEST "ingester_test")
-set(READ_BUFR_TEST "read_bufr_test")
 
 LIST(APPEND exes
-        ${INGESTER_TEST}
-        ${READ_BUFR_TEST})
+        ${INGESTER_TEST})
 
 add_subdirectory(Ingester)
 include_directories(Ingester)
 
 add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS} Ingester/IodaEncoder/IodaEncoder.cpp Ingester/IodaEncoder/IodaEncoder.h)
-add_executable(${READ_BUFR_TEST} test_read_bufr.cpp BufrFile.cpp)
 
 foreach(exe ${exes})
   target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
