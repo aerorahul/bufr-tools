@@ -1,0 +1,7 @@
+format 222
+
+classcanvas 128003 class_ref 135555 // bufr.interface
+  classdiagramsettings member_max_width 0 end
+  xyz 273 191 2000
+end
+end

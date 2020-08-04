@@ -1,0 +1,138 @@
+format 222
+"Ingester" // Ingester
+  revision 2
+  modified_by 3 "rmclaren"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  package_ref 129027 // Misc Parser
+
+  package_ref 128771 // IodaEncoder
+
+  package_ref 128003 // Bufr Parser
+
+  simplerelation 128259
+    -_->
+      on 
+      package_ref 128515 // Eigen
+  end
+
+  simplerelation 128387
+    -_->
+      on 
+      package_ref 128259 // NCEPLIB-bufr
+  end
+
+  simplerelation 128643
+    -_->
+      on 
+      package_ref 128515 // Eigen
+  end
+
+  classview 134787 "Classes"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 135171 "IngesterData"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      operation 128899 "get"
+	public return_type class_ref 135299 // ArrayXXf
+	nparams 1
+	  param in name "fieldName" explicit_type "string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      attribute 128515 "data"
+	private explicit_type "map<string, ArrayXXf>"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    sequencediagram 135171 "Setting Up Pipeline And Parsing Bufr File"
+      sequencediagramsettings show_full_operations_definition no show_class_of_operation no end
+      overlapping_bars size A4
+    end
+
+    class 136195 "Pipeline"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+  end
+end

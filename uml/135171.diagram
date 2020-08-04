@@ -1,0 +1,94 @@
+format 222
+
+classinstance 128003 class_ref 136195 // Pipeline
+  drawing_mode actor  name ""   xyz 123 4 2000 life_line_z 2000
+classinstance 128131 class_ref 135427 // BufrDescription
+  name "bufrDesc"   xyz 201 77 2000 life_line_z 2000
+classinstance 128643 class_ref 128003 // BufrParser
+  name "parser"   xyz 302 127 2000 life_line_z 2000
+classinstance 129027 class_ref 135939 // ObsGroupDescription
+  name "groupDesc"   xyz 373 173 2000 life_line_z 2000
+classinstance 129411 class_ref 135811 // IodaEncoder
+  name "encoder"   xyz 509 228 2000 life_line_z 2000
+fragment 129795 "Init"
+  xyzwh 82 65 2015 579 286
+end
+fragment 129923 "Processing"
+  xyzwh 80 372 2015 577 190
+end
+durationcanvas 128259 classinstance_ref 128003 // :Pipeline
+  xyzwh 138 80 2010 11 482
+end
+durationcanvas 128387 classinstance_ref 128131 // bufrDesc:BufrDescription
+  xyzwh 257 139 2010 11 26
+end
+durationcanvas 128771 classinstance_ref 128643 // parser:BufrParser
+  xyzwh 342 178 2010 11 25
+end
+durationcanvas 129155 classinstance_ref 129027 // groupDesc:ObsGroupDescription
+  xyzwh 447 224 2010 11 25
+end
+durationcanvas 129539 classinstance_ref 129411 // encoder:IodaEncoder
+  xyzwh 557 278 2010 11 26
+end
+durationcanvas 130051 classinstance_ref 128643 // parser:BufrParser
+  xyzwh 342 418 2010 11 34
+end
+durationcanvas 130435 classinstance_ref 129411 // encoder:IodaEncoder
+  xyzwh 557 488 2010 11 38
+end
+msg 128515 synchronous
+  from durationcanvas_ref 128259
+  to durationcanvas_ref 128387
+  yz 139 2015 msg operation_ref 129155 // "BufrDescription(in yamlFilepath : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "filepath"
+  label_xy 155 126
+msg 128899 synchronous
+  from durationcanvas_ref 128259
+  to durationcanvas_ref 128771
+  yz 180 2015 msg operation_ref 128003 // "BufrParser(in description : BufrDescription) : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "bufrDesc"
+  label_xy 188 171
+msg 129283 synchronous
+  from durationcanvas_ref 128259
+  to durationcanvas_ref 129155
+  yz 224 2015 msg operation_ref 130819 // "ObsGroupDescription(in yamlFillepath : string)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "yamlFilepath"
+  label_xy 220 210
+msg 129667 synchronous
+  from durationcanvas_ref 128259
+  to durationcanvas_ref 129539
+  yz 278 2015 msg operation_ref 130691 // "IodaEncoder(in description : ObsGroupDescription)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "groupDesc"
+  label_xy 321 268
+msg 130179 synchronous
+  from durationcanvas_ref 128259
+  to durationcanvas_ref 130051
+  yz 418 2015 msg operation_ref 128131 // "parse(in bufrFilePath : string) : IngesterData"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "bufrFilepath"
+  label_xy 229 408
+msg 130307 return
+  from durationcanvas_ref 130051
+  to durationcanvas_ref 128259
+  yz 440 2015 explicitmsg "ingesterData"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 158 435
+msg 130563 synchronous
+  from durationcanvas_ref 128259
+  to durationcanvas_ref 130435
+  yz 488 2015 msg operation_ref 130947 // "createObsGroup(in ingesterData : IngesterData) : ObsGroup"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "ingestreData"
+  label_xy 289 477
+msg 130691 return
+  from durationcanvas_ref 130435
+  to durationcanvas_ref 128259
+  yz 513 2020 explicitmsg "obsGroup"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 161 507
+end

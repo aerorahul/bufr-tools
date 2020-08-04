@@ -1,0 +1,41 @@
+format 222
+
+packagecanvas 128003 
+  package_ref 128003 // Bufr Parser
+    xyzwh 155.6 179.4 2000 65 51
+end
+packagecanvas 128515 
+  package_ref 128259 // NCEPLIB-bufr
+   show_context_mode namespace color verylightorange  xyzwh 112.2 283.2 2000 108 68
+end
+packagecanvas 128643 
+  package_ref 128515 // Eigen
+   color verylightorange  xyzwh 494.6 129.2 2000 69 51
+end
+packagecanvas 129283 
+  package_ref 128643 // Ingester
+    xyzwh 115.2 61.2 2000 308 181
+end
+packagecanvas 129539 
+  package_ref 128771 // IodaEncoder
+    xyzwh 327.6 175.4 2005 65 51
+end
+packagecanvas 129667 
+  package_ref 128899 // IodaEngines
+   color verylightorange  xyzwh 369.6 300.4 2000 69 51
+end
+packagecanvas 129923 
+  package_ref 129027 // Misc Parser
+   color lightgray  xyzwh 156 105.4 2005 69 51
+end
+simplerelationcanvas 129155 simplerelation_ref 128515
+  from ref 128003 z 2001 to ref 128515
+end
+simplerelationcanvas 129411 simplerelation_ref 128643
+  from ref 129283 z 2001 to ref 128643
+end
+simplerelationcanvas 129795 simplerelation_ref 128771
+  decenter_begin 870
+  from ref 129539 z 2006 to ref 129667
+end
+end
