@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include <map>
 
 #include "Eigen/Dense"
 
