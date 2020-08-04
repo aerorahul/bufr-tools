@@ -1,9 +1,9 @@
 #include <iostream>
 
-#include "Ingester/BufrParser/BufrParser.h"
-#include "Ingester/BufrParser/BufrDescription.h"
-#include "Ingester/BufrParser/MnemonicSet.h"
-#include "Ingester/IngesterData.h"
+#include "BufrParser/BufrParser.h"
+#include "BufrParser/BufrDescription.h"
+#include "BufrParser/MnemonicSet.h"
+#include "IngesterData.h"
 
 using namespace Ingester;
 using namespace std;
