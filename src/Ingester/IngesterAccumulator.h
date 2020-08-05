@@ -11,7 +11,6 @@ namespace Ingester
 {
     using namespace Eigen;
 
-    //Adapted from https://stackoverflow.com/questions/49882761/eigen-accumulating-arrays-of-variable-size
     class IngesterAccumulator
     {
     public:

@@ -1,7 +1,5 @@
 
 #include <map>
-#include <iostream>
-#include "Eigen/Dense"
 
 #include "bufr.interface.h"
 #include "BufrParser.h"

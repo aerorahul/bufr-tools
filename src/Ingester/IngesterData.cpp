@@ -1,12 +1,9 @@
 #include <iostream>
 #include <utility>
-
 #include "IngesterData.h"
 
 
 using namespace Ingester;
-
-
 
 void IngesterData::add(const string& fieldName, const IngesterArray& data)
 {
