@@ -19,7 +19,7 @@ namespace Ingester
 
         void addRow(double* newRow);
 
-        IngesterArray getData();
+        IngesterArray getData(Index startCol, Index numCols);
 
     private:
         IngesterArray dataArray_;

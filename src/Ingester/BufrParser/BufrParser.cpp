@@ -16,29 +16,27 @@ using namespace Eigen;
 static const int FORTRAN_FILE_UNIT = 11;
 static const unsigned int SUBSET_STR_LEN = 25;
 
-typedef vector<IngesterAccumulator> AccumVec;
-typedef vector<AccumVec> AccumVecVec;
 
+typedef vector<IngesterAccumulator> AccumVec;
 
 BufrParser::BufrParser(BufrDescription& description) :
   description_(description)
 {
 }
 
-
 shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigned int messagesToParse)
 {
     //Initialize the data map
-    AccumVecVec accumVecVec;
+    AccumVec accumVec;
     for (const auto& mnemonicSet : description_.getMnemonicSets())
     {
-        AccumVec accumVec;
+        unsigned int numColumns = 0;
         for (const auto& mnemonic : mnemonicSet.getMnemonics())
         {
-            accumVec.push_back(IngesterAccumulator(mnemonicSet.getElementSize()));
+            numColumns += mnemonicSet.getElementSize();
         }
 
-        accumVecVec.push_back(accumVec);
+        accumVec.push_back(IngesterAccumulator(numColumns));
     }
 
     //Parse the BUFR file
@@ -78,12 +76,7 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
                              mnemonicSet.getMnemonicStr().c_str());
                 }
 
-                unsigned int offset = 0;
-                for (unsigned int mnemonicIdx = 0; mnemonicIdx < mnemonicSet.getSize(); mnemonicIdx++)
-                {
-                    accumVecVec[mnemonicSetIdx][mnemonicIdx].addRow(sbData + offset);
-                    offset += mnemonicSet.getElementSize();
-                }
+                accumVec[mnemonicSetIdx].addRow(sbData);
 
                 delete[] sbData;
                 mnemonicSetIdx++;
@@ -104,7 +97,8 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
         unsigned int mnemonicIdx = 0;
         for (const auto& mnemonic : mnemonicSet.getMnemonics())
         {
-            ingesterData->add(mnemonic, accumVecVec[mnemonicSetIdx][mnemonicIdx].getData());
+            ingesterData->add(mnemonic, accumVec[mnemonicSetIdx].getData(mnemonicIdx * mnemonicSet.getElementSize(),
+                                                                         mnemonicSet.getElementSize()));
             mnemonicIdx++;
         }
         mnemonicSetIdx++;

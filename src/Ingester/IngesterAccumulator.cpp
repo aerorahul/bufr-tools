@@ -26,7 +26,7 @@ void IngesterAccumulator::addRow(double* newRow)
     numDataRows_++;
 }
 
-IngesterArray IngesterAccumulator::getData()
+IngesterArray IngesterAccumulator::getData(Index startCol, Index numCols)
 {
-    return dataArray_.block(0, 0, numDataRows_, numColumns_);
+    return dataArray_.block(0, startCol, numDataRows_, numCols);
 }
