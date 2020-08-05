@@ -23,7 +23,7 @@ LIST(APPEND exes
 add_subdirectory(Ingester)
 include_directories(Ingester)
 
-add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS} Ingester/IodaEncoder/IodaEncoder.cpp Ingester/IodaEncoder/IodaEncoder.h)
+add_executable(${INGESTER_TEST} test_ingester.cpp ${INGESTER_SRCS})
 
 foreach(exe ${exes})
   target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
