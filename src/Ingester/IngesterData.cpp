@@ -6,7 +6,9 @@
 
 using namespace Ingester;
 
-void IngesterData::add(const string& fieldName, IngesterArray data)
+
+
+void IngesterData::add(const string& fieldName, const IngesterArray& data)
 {
     if (dataMap_.find(fieldName) != dataMap_.end())
     {

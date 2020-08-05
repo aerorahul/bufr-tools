@@ -18,7 +18,7 @@ namespace Ingester
     public:
         IngesterData() = default;
 
-        void add(const string& fieldName, IngesterArray data);
+        void add(const string& fieldName, const IngesterArray& data);
         IngesterArray get(const string& fieldName);
 
     private:

@@ -7,6 +7,7 @@
 #include "BufrParser.h"
 #include "MnemonicSet.h"
 #include "IngesterData.h"
+#include "IngesterAccumulator.h"
 
 
 using namespace Ingester;
@@ -15,9 +16,8 @@ using namespace Eigen;
 static const int FORTRAN_FILE_UNIT = 11;
 static const unsigned int SUBSET_STR_LEN = 25;
 
-typedef vector<IngesterArray> DataVector;
-typedef vector<DataVector> MnemonicData;
-typedef vector<MnemonicData> DataMap;
+typedef vector<IngesterAccumulator> AccumVec;
+typedef vector<AccumVec> AccumVecVec;
 
 
 BufrParser::BufrParser(BufrDescription& description) :
@@ -25,19 +25,20 @@ BufrParser::BufrParser(BufrDescription& description) :
 {
 }
 
+
 shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigned int messagesToParse)
 {
     //Initialize the data map
-    DataMap dataMap;
+    AccumVecVec accumVecVec;
     for (const auto& mnemonicSet : description_.getMnemonicSets())
     {
-        MnemonicData mnemonicData;
+        AccumVec accumVec;
         for (const auto& mnemonic : mnemonicSet.getMnemonics())
         {
-            mnemonicData.push_back(DataVector());
+            accumVec.push_back(IngesterAccumulator(mnemonicSet.getElementSize()));
         }
 
-        dataMap.push_back(mnemonicData);
+        accumVecVec.push_back(accumVec);
     }
 
     //Parse the BUFR file
@@ -78,15 +79,10 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
                 }
 
                 unsigned int offset = 0;
-                unsigned int mnemonicIdx = 0;
-                for (const auto& mnemonic : mnemonicSet.getMnemonics())
+                for (unsigned int mnemonicIdx = 0; mnemonicIdx < mnemonicSet.getSize(); mnemonicIdx++)
                 {
-                    DataVector* dataVector = &(dataMap[mnemonicSetIdx][mnemonicIdx]);
-                    IngesterArray arr = Map<IngesterArray>(sbData + offset, 1, mnemonicSet.getElementSize());
-                    dataVector->push_back(arr);
-
+                    accumVecVec[mnemonicSetIdx][mnemonicIdx].addRow(sbData + offset);
                     offset += mnemonicSet.getElementSize();
-                    mnemonicIdx++;
                 }
 
                 delete[] sbData;
@@ -108,17 +104,7 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
         unsigned int mnemonicIdx = 0;
         for (const auto& mnemonic : mnemonicSet.getMnemonics())
         {
-            DataVector* dataVector = &(dataMap[mnemonicSetIdx][mnemonicIdx]);
-            IngesterArray resArr(dataVector->size(), mnemonicSet.getElementSize());
-
-            unsigned int rowIdx = 0;
-            for (const auto& rowArr : *dataVector)
-            {
-                resArr.row(rowIdx) << rowArr.row(0);
-                rowIdx++;
-            }
-
-            ingesterData->add(mnemonic, resArr);
+            ingesterData->add(mnemonic, accumVecVec[mnemonicSetIdx][mnemonicIdx].getData());
             mnemonicIdx++;
         }
         mnemonicSetIdx++;
