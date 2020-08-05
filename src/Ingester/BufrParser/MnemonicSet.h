@@ -13,8 +13,8 @@ namespace Ingester
         MnemonicSet(const string mnemonics, const size_t elementSize);
 
         //Getters
-        inline vector<string> getMnemonics() const { return mnemonics_; }
-        inline string getMnemonicStr() const { return mnemonicsStr_; }
+        inline vector<string>& getMnemonics() { return mnemonics_; }
+        inline string getMnemonicStr() const  { return mnemonicsStr_; }
         inline size_t getElementSize() const  { return elementSize_; }
         inline size_t getSize() const  { return mnemonics_.size(); }
 

@@ -12,9 +12,10 @@ namespace Ingester
     class BufrDescription
     {
     public: 
-        BufrDescription();
+        BufrDescription() = default;
+
         void addMnemonicSet(MnemonicSet& mnemonicSet);
-        inline vector<MnemonicSet> getMnemonicSets() { return mnemonicSets_; }
+        inline vector<MnemonicSet>& getMnemonicSets() { return mnemonicSets_; }
 
     private:
         vector<MnemonicSet> mnemonicSets_;

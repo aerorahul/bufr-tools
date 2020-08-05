@@ -28,10 +28,10 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
 {
     //Initialize the data map
     AccumVec accumVec;
-    for (const auto& mnemonicSet : description_.getMnemonicSets())
+    for (auto& mnemonicSet : description_.getMnemonicSets())
     {
         unsigned int numColumns = 0;
-        for (const auto& mnemonic : mnemonicSet.getMnemonics())
+        for (auto& mnemonic : mnemonicSet.getMnemonics())
         {
             numColumns += mnemonicSet.getElementSize();
         }
@@ -92,10 +92,10 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
     //Create the IngesterData objeect
     auto ingesterData = make_shared<IngesterData>();
     unsigned int mnemonicSetIdx = 0;
-    for (const auto& mnemonicSet : description_.getMnemonicSets())
+    for (auto& mnemonicSet : description_.getMnemonicSets())
     {
         unsigned int mnemonicIdx = 0;
-        for (const auto& mnemonic : mnemonicSet.getMnemonics())
+        for (auto& mnemonic : mnemonicSet.getMnemonics())
         {
             ingesterData->add(mnemonic, accumVec[mnemonicSetIdx].getData(mnemonicIdx * mnemonicSet.getElementSize(),
                                                                          mnemonicSet.getElementSize()));
