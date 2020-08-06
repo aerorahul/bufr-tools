@@ -1,0 +1,8 @@
+bufrParser:
+  mnemonicSets:
+    - mnemonics: "SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS"
+      perElementSize : 1
+    - mnemonics: "SAZA SOZA BEARAZ SOLAZI"
+      perElementSize : 1
+    - mnemonics: "TMBR"
+      perElementSize : 15

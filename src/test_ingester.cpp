@@ -9,10 +9,12 @@ using namespace Ingester;
 using namespace std;
 
 
+static const string CONFIG_FILE = "/Users/rmclaren/Work/bufr-tools/test_ingester.yaml";
 static const string INPUT_FILE = "/Users/rmclaren/Work/sample-bufr-data/gdas/gdas.20200704/12/gdas.t12z.1bmhs.tm00.bufr_d";
 static const string OUTPUT_FILE = "/Users/rmclaren/Temp/ioda.nc";
 
-int main(int argc, const char** argv)
+
+void createDescriptionManually()
 {
     auto description = BufrDescription();
 
@@ -28,7 +30,21 @@ int main(int argc, const char** argv)
     auto data = bufrParser.parse(INPUT_FILE, 5);
 
     cout << data->get("TMBR") << endl;
+}
 
-  return 0;
+void readDescriptionFromFile()
+{
+    auto description = BufrDescription(CONFIG_FILE);
+    auto bufrParser = BufrParser(description);
+    auto data = bufrParser.parse(INPUT_FILE, 5);
+
+    cout << data->get("TMBR") << endl;
+}
+
+int main(int, const char**)
+{
+    readDescriptionFromFile();
+
+    return 0;
 }
 

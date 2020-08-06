@@ -33,6 +33,7 @@ find_package(bufr REQUIRED)
 find_package( Eigen3 REQUIRED NO_MODULE HINTS
               $ENV{Eigen3_ROOT} $ENV{EIGEN3_ROOT} $ENV{Eigen_ROOT} $ENV{EIGEN_ROOT}
               $ENV{Eigen3_PATH} $ENV{EIGEN3_PATH} $ENV{Eigen_PATH} $ENV{EIGEN_PATH} )
+find_package(eckit REQUIRED)
 find_package(jedi REQUIRED)
 find_package(ioda_engines REQUIRED)
 

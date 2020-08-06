@@ -13,8 +13,9 @@ namespace Ingester
     {
     public: 
         BufrDescription() = default;
+        explicit BufrDescription(const string& filepath);
 
-        void addMnemonicSet(MnemonicSet& mnemonicSet);
+        void addMnemonicSet(MnemonicSet mnemonicSet);
         inline vector<MnemonicSet>& getMnemonicSets() { return mnemonicSets_; }
 
     private:

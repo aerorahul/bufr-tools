@@ -29,6 +29,7 @@ foreach(exe ${exes})
   target_link_libraries(${exe} PUBLIC Eigen3::Eigen)
   target_link_libraries(${exe} PRIVATE bufr::bufr_4_DA)
   target_link_libraries(${exe} PRIVATE ioda::ioda-engines)
+  target_link_libraries(${exe} PRIVATE eckit)
 endforeach()
 
 #install(TARGETS ${EXE_TARGETS} RUNTIME
