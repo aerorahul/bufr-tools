@@ -1,5 +1,7 @@
 #pragma once
 
+#include <eckit/config/LocalConfiguration.h>
+
 #include <string>
 #include <vector>
 
@@ -13,7 +15,7 @@ namespace Ingester
     {
     public: 
         BufrDescription() = default;
-        explicit BufrDescription(const string& filepath);
+        explicit BufrDescription(const eckit::Configuration& conf);
 
         void addMnemonicSet(MnemonicSet mnemonicSet);
         inline vector<MnemonicSet>& getMnemonicSets() { return mnemonicSets_; }

@@ -40,6 +40,7 @@
 build*/
 install*/
 CMakeFiles
+cmake-build-debug
 
 #IDE Files
 .vscode

@@ -1,8 +1,22 @@
-bufrParser:
-  mnemonicSets:
-    - mnemonics: "SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS"
-      perElementSize : 1
-    - mnemonics: "SAZA SOZA BEARAZ SOLAZI"
-      perElementSize : 1
-    - mnemonics: "TMBR"
-      perElementSize : 15
+dataBasepath: "/Users/rmclaren/Work/sample-bufr-data/gdas/gdas.20200704/12"
+
+bufrData:
+  - type: "mhs"
+    filename: "gdas.t12z.1bmhs.tm00.bufr_d"
+    mnemonicSets:
+      - mnemonics: "SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS"
+        perElementSize : 1
+      - mnemonics: "SAZA SOZA BEARAZ SOLAZI"
+        perElementSize : 1
+      - mnemonics: "TMBR"
+        perElementSize : 15
+
+  - type: "amua"
+    filename: "gdas.t12z.1bamua.tm00.bufr_d"
+    mnemonicSets:
+      - mnemonics: "SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS"
+        perElementSize : 1
+      - mnemonics: "SAZA SOZA BEARAZ SOLAZI"
+        perElementSize : 1
+      - mnemonics: "TMBR"
+        perElementSize : 15

@@ -17,8 +17,9 @@ list(APPEND INGESTER_SRCS
 
 add_library(ingester ${INGESTER_SRCS})
 target_link_libraries(ingester PUBLIC Eigen3::Eigen)
+target_link_libraries(ingester PUBLIC eckit)
 target_link_libraries(ingester PRIVATE bufr::bufr_4_DA)
-target_link_libraries(ingester PRIVATE eckit)
+
 
 target_include_directories(ingester PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
