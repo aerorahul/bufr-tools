@@ -19,9 +19,9 @@ const string PER_ELEMENT_SIZE_YAML_NAME = "perElementSize";
 
 BufrDescription::BufrDescription(const string& filepath)
 {
-    auto yaml = YAMLConfiguration(eckit::PathName(filepath));
+    auto yaml = YAMLConfiguration(PathName(filepath));
 
-    auto conf = yaml.getSubConfiguration(BUFR_PARSER_YAML_SECTION);
+    auto conf = yaml.getSubConfiguration(BUFR_PARSER_YAML_SECTION)
                     .getSubConfiguration(MNEMONIC_SETS_YAML_SECTION);
 
 
