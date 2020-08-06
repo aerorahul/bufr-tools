@@ -1,19 +1,28 @@
-
 list(APPEND INGESTER_SRCS
-        ${CMAKE_CURRENT_SOURCE_DIR}/IngesterData.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/IngesterData.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/BufrParser/BufrParser.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/BufrParser/BufrParser.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/BufrParser/BufrDescription.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/BufrParser/BufrDescription.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/BufrParser/MnemonicSet.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/BufrParser/MnemonicSet.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IodaEncoder/IodaEncoder.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IodaEncoder/IodaEncoder.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/IodaEncoder/ObsGroupDescription.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IodaEncoder/ObsGroupDescription.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/IngesterAccumulator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/IngesterAccumulator.h
-        )
+  IngesterData.h
+  IngesterData.cpp
+  BufrParser/BufrParser.h
+  BufrParser/BufrParser.cpp
+  BufrParser/BufrDescription.h
+  BufrParser/BufrDescription.cpp
+  BufrParser/MnemonicSet.h
+  BufrParser/MnemonicSet.cpp
+  IodaEncoder/IodaEncoder.cpp
+  IodaEncoder/IodaEncoder.h
+  # IodaEncoder/ObsGroupDescription.cpp
+  # IodaEncoder/ObsGroupDescription.h
+  IngesterAccumulator.cpp
+  IngesterAccumulator.h
+)
 
-set(INGESTER_SRCS ${INGESTER_SRCS} PARENT_SCOPE)
+add_library(ingester ${INGESTER_SRCS})
+target_link_libraries(ingester PUBLIC Eigen3::Eigen)
+target_link_libraries(ingester PRIVATE bufr::bufr_4_DA)
+target_link_libraries(ingester PRIVATE eckit)
+
+target_include_directories(ingester PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+
+target_include_directories(ingester INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:include>)

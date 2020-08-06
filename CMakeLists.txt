@@ -4,8 +4,8 @@ project(bufrtools
         VERSION 0.0.1
         LANGUAGES C CXX Fortran)
 
-set ( CMAKE_CXX_STANDARD 17 )
-set ( CMAKE_DIRECTORY_LABELS "bufr-tool" )
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_DIRECTORY_LABELS "bufr-tool")
 
 include(GNUInstallDirs)
 
@@ -22,21 +22,23 @@ if(NOT CMAKE_C_COMPILER_ID MATCHES "^(Intel|GNU|Clang|AppleClang)$")
     WARNING "Compiler not officially supported: ${CMAKE_C_COMPILER_ID}")
 endif()
 
+if(NOT CMAKE_CXX_COMPILER_ID MATCHES "^(Intel|GNU|Clang|AppleClang)$")
+  message(
+    WARNING "Compiler not officially supported: ${CMAKE_CXX_COMPILER_ID}")
+endif()
+
 if(NOT CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|GNU)$")
   message(
     WARNING "Compiler not officially supported: ${CMAKE_Fortran_COMPILER_ID}")
 endif()
 
-set(jedi_DIR ${CMAKE_PREFIX_PATH}/ioda_engines/lib/cmake/jedi)
-
 find_package(bufr REQUIRED)
 find_package( Eigen3 REQUIRED NO_MODULE HINTS
               $ENV{Eigen3_ROOT} $ENV{EIGEN3_ROOT} $ENV{Eigen_ROOT} $ENV{EIGEN_ROOT}
               $ENV{Eigen3_PATH} $ENV{EIGEN3_PATH} $ENV{Eigen_PATH} $ENV{EIGEN_PATH} )
+
 find_package(eckit REQUIRED)
-find_package(jedi REQUIRED)
-find_package(ioda_engines REQUIRED)
+#find_package(jedi REQUIRED)
+#find_package(ioda_engines REQUIRED)
 
 add_subdirectory(src)
-# add_subdirectory(deps/NCEPLIBS-bufr)
-
