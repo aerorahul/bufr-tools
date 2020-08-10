@@ -1,4 +1,7 @@
 
+#include <iostream>
+
+#include "oops/IntSetParser.h"
 #include "BufrDescription.h"
 #include "MnemonicSet.h"
 
@@ -16,8 +19,10 @@ BufrDescription::BufrDescription(const eckit::Configuration& conf)
 
     for (const auto& mnemonicSetConf : subConf.getSubConfigurations())
     {
+        auto channels = oops::parseIntSet(mnemonicSetConf.getString(PER_ELEMENT_SIZE_YAML_NAME));
+
         addMnemonicSet(MnemonicSet(mnemonicSetConf.getString(MNEMONIC_STR_YAML_NAME),
-                                   mnemonicSetConf.getInt(PER_ELEMENT_SIZE_YAML_NAME)));
+                                   channels));
 
     }
 }

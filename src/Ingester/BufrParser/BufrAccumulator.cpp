@@ -2,12 +2,11 @@
 // Created by Ronald McLaren on 8/5/20.
 //
 
-#include "IngesterAccumulator.h"
-
+#include "BufrAccumulator.h"
 
 using namespace Ingester;
 
-IngesterAccumulator::IngesterAccumulator(Index numColumns, Index blockSize) :
+BufrAccumulator::BufrAccumulator(Index numColumns, Index blockSize) :
     dataArray_(blockSize, numColumns),
     numColumns_(numColumns),
     numDataRows_(0),
@@ -15,7 +14,7 @@ IngesterAccumulator::IngesterAccumulator(Index numColumns, Index blockSize) :
 {
 }
 
-void IngesterAccumulator::addRow(double* newRow)
+void BufrAccumulator::addRow(double* newRow)
 {
     if (numDataRows_ + 1 > dataArray_.rows())
     {
@@ -26,7 +25,7 @@ void IngesterAccumulator::addRow(double* newRow)
     numDataRows_++;
 }
 
-IngesterArray IngesterAccumulator::getData(Index startCol, Index numCols)
+IngesterArray BufrAccumulator::getData(Index startCol, Index numCols)
 {
     return dataArray_.block(0, startCol, numDataRows_, numCols);
 }

@@ -28,20 +28,20 @@ const string PATH_SEPERATOR =
 
 void createDescriptionManually()
 {
-    auto description = BufrDescription();
-
-    auto set1 = MnemonicSet("SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS", 1);
-    auto set2 = MnemonicSet("SAZA SOZA BEARAZ SOLAZI", 1);
-    auto set3 = MnemonicSet("TMBR", 15);
-
-    description.addMnemonicSet(set1);
-    description.addMnemonicSet(set2);
-    description.addMnemonicSet(set3);
-
-    auto bufrParser = BufrParser(description);
-    auto data = bufrParser.parse(INPUT_FILE, 5);
-
-    cout << data->get("TMBR") << endl;
+//    auto description = BufrDescription();
+//
+//    auto set1 = MnemonicSet("SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS", 1);
+//    auto set2 = MnemonicSet("SAZA SOZA BEARAZ SOLAZI", 1);
+//    auto set3 = MnemonicSet("TMBR", 15);
+//
+//    description.addMnemonicSet(set1);
+//    description.addMnemonicSet(set2);
+//    description.addMnemonicSet(set3);
+//
+//    auto bufrParser = BufrParser(description);
+//    auto data = bufrParser.parse(INPUT_FILE, 5);
+//
+//    cout << data->get("TMBR") << endl;
 }
 
 void readDescriptionFromFile()

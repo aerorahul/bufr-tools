@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <set>
+
 #include "Eigen/Dense"
 #include "IngesterData.h"
 
@@ -11,10 +13,10 @@ namespace Ingester
 {
     using namespace Eigen;
 
-    class IngesterAccumulator
+    class BufrAccumulator
     {
     public:
-        explicit IngesterAccumulator(Index numColumns, Index blockSize = 50000);
+        explicit BufrAccumulator(Index numColumns, Index blockSize = 50000);
 
         void addRow(double* newRow);
 

@@ -8,6 +8,7 @@
 
 #include "BufrDescription.h"
 
+
 namespace Ingester
 {
     using namespace std;
@@ -23,5 +24,8 @@ namespace Ingester
 
     private:
         BufrDescription description_;
+
+        int openBufrFile(const string& filepath);
+        void closeBufrFile(const unsigned int fileUnit);
     };
 }

@@ -1,11 +1,16 @@
 
 #include <map>
+#include <iostream>
 
 #include "bufr.interface.h"
 #include "BufrParser.h"
 #include "MnemonicSet.h"
 #include "IngesterData.h"
-#include "IngesterAccumulator.h"
+#include "BufrAccumulator.h"
+
+#include "BufrOperations/BufrOperation.h"
+#include "BufrOperations/BufrIntOperation.h"
+#include "BufrOperations/BufrRepOperation.h"
 
 
 using namespace Ingester;
@@ -14,8 +19,10 @@ using namespace Eigen;
 static const int FORTRAN_FILE_UNIT = 11;
 static const unsigned int SUBSET_STR_LEN = 25;
 
+typedef vector<BufrOperation*> Operations;
 
-typedef vector<IngesterAccumulator> AccumVec;
+
+//Public Methods
 
 BufrParser::BufrParser(BufrDescription& description) :
   description_(description)
@@ -24,68 +31,40 @@ BufrParser::BufrParser(BufrDescription& description) :
 
 shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigned int messagesToParse)
 {
-    //Initialize the data map
-    AccumVec accumVec;
+    //Parse the BUFR file
+    const int fileUnit = openBufrFile(filepath);
+
+    Operations operations;
     for (auto& mnemonicSet : description_.getMnemonicSets())
     {
-        unsigned int numColumns = 0;
-        for (auto& mnemonic : mnemonicSet.getMnemonics())
+        if (mnemonicSet.getMaxColumn() == 1)
         {
-            numColumns += mnemonicSet.getElementSize();
+            operations.push_back(new BufrIntOperation(fileUnit, mnemonicSet));
         }
-
-        accumVec.push_back(IngesterAccumulator(numColumns));
+        else
+        {
+            operations.push_back(new BufrRepOperation(fileUnit, mnemonicSet));
+        }
     }
-
-    //Parse the BUFR file
-    open_f(FORTRAN_FILE_UNIT, filepath.c_str());
-    openbf_f(FORTRAN_FILE_UNIT, "IN", FORTRAN_FILE_UNIT);
 
     char subset[SUBSET_STR_LEN];
     int iddate;
 
     unsigned int messageNum = 0;
-    while (ireadmg_f(FORTRAN_FILE_UNIT, subset, &iddate, SUBSET_STR_LEN) == 0)
+    while (ireadmg_f(fileUnit, subset, &iddate, SUBSET_STR_LEN) == 0)
     {
-        while (ireadsb_f(FORTRAN_FILE_UNIT) == 0)
+        while (ireadsb_f(fileUnit) == 0)
         {
-            unsigned int mnemonicSetIdx = 0;
-            for (const auto& mnemonicSet : description_.getMnemonicSets())
+            for (auto& op : operations)
             {
-                auto sbData = new double[mnemonicSet.getSize() * mnemonicSet.getElementSize()];
-                int result;
-
-                if (mnemonicSet.getElementSize() == 1)
-                {
-                    ufbint_f(FORTRAN_FILE_UNIT,
-                            (void**) &sbData,
-                            mnemonicSet.getSize(),
-                            mnemonicSet.getElementSize(),
-                            &result,
-                            mnemonicSet.getMnemonicStr().c_str());
-                }
-                else
-                {
-                    ufbrep_f(FORTRAN_FILE_UNIT,
-                             (void**) &sbData,
-                             mnemonicSet.getSize(),
-                             mnemonicSet.getElementSize(),
-                             &result,
-                             mnemonicSet.getMnemonicStr().c_str());
-                }
-
-                accumVec[mnemonicSetIdx].addRow(sbData);
-
-                delete[] sbData;
-                mnemonicSetIdx++;
+                op->execute();
             }
         }
 
         if (messagesToParse > 0 && ++messageNum >= messagesToParse) break;
     }
 
-    closbf_f(FORTRAN_FILE_UNIT);
-    close_f(FORTRAN_FILE_UNIT);
+    closeBufrFile(fileUnit);
 
     //Create the IngesterData objeect
     auto ingesterData = make_shared<IngesterData>();
@@ -95,12 +74,37 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
         unsigned int mnemonicIdx = 0;
         for (auto& mnemonic : mnemonicSet.getMnemonics())
         {
-            ingesterData->add(mnemonic, accumVec[mnemonicSetIdx].getData(mnemonicIdx * mnemonicSet.getElementSize(),
-                                                                         mnemonicSet.getElementSize()));
+            IngesterArray dataArr = operations[mnemonicSetIdx]->data(mnemonicIdx * mnemonicSet.getMaxColumn(),
+                                                                 mnemonicSet.getMaxColumn());
+
+            ingesterData->add(mnemonic, dataArr);
+
             mnemonicIdx++;
         }
         mnemonicSetIdx++;
     }
 
+    for (auto* operation : operations)
+    {
+        delete operation;
+    }
+
     return ingesterData;
+}
+
+//Private Methods
+int BufrParser::openBufrFile(const string& filepath)
+{
+    static const int fileUnit = 11;
+
+    open_f(fileUnit, filepath.c_str());
+    openbf_f(fileUnit, "IN", fileUnit);
+
+    return fileUnit;
+}
+
+void BufrParser::closeBufrFile(const unsigned int fileUnit)
+{
+    closbf_f(fileUnit);
+    close_f(fileUnit);
 }

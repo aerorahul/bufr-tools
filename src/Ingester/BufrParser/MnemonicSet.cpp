@@ -8,11 +8,20 @@
 using namespace Ingester;
 using namespace std;
 
-MnemonicSet::MnemonicSet(const string nmemonicsStr, const size_t elementSize) :
+MnemonicSet::MnemonicSet(const string nmemonicsStr, const set<int> columnSet) :
     mnemonicsStr_(nmemonicsStr),
-    elementSize_(elementSize)
+    columnSet_(columnSet)
 {
     mnemonics_ = tokenizeMnemonics(nmemonicsStr);
+
+    maxColumn_ = 0;
+    for (auto col : columnSet_)
+    {
+        if (col > maxColumn_)
+        {
+            maxColumn_ = col;
+        }
+    }
 }
 
 vector<string> MnemonicSet::tokenizeMnemonics(const string& nmemonicsStr)
