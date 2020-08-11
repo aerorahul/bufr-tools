@@ -5,8 +5,6 @@ bufrData:
     filename: "gdas.t12z.1bmhs.tm00.bufr_d"
     mnemonicSets:
       - mnemonics: "SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS"
-        perElementSize : 1
       - mnemonics: "SAZA SOZA BEARAZ SOLAZI"
-        perElementSize : 1
       - mnemonics: "TMBR"
-        perElementSize : 1-15
+        channels : 1-15

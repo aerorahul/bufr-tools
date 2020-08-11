@@ -11,7 +11,7 @@ using namespace std;
 
 const string MNEMONIC_SETS_YAML_SECTION = "mnemonicSets";
 const string MNEMONIC_STR_YAML_NAME = "mnemonics";
-const string PER_ELEMENT_SIZE_YAML_NAME = "perElementSize";
+const string CHANNEL_NAME = "channels";
 
 BufrDescription::BufrDescription(const eckit::Configuration& conf)
 {
@@ -19,7 +19,15 @@ BufrDescription::BufrDescription(const eckit::Configuration& conf)
 
     for (const auto& mnemonicSetConf : subConf.getSubConfigurations())
     {
-        auto channels = oops::parseIntSet(mnemonicSetConf.getString(PER_ELEMENT_SIZE_YAML_NAME));
+        set<int> channels;
+        if (mnemonicSetConf.has(CHANNEL_NAME))
+        {
+            channels = oops::parseIntSet(mnemonicSetConf.getString(CHANNEL_NAME));
+        }
+        else
+        {
+            channels = {1};
+        }
 
         addMnemonicSet(MnemonicSet(mnemonicSetConf.getString(MNEMONIC_STR_YAML_NAME),
                                    channels));
