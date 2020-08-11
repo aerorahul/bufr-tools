@@ -1,11 +1,13 @@
+#include "BufrParser.h"
 
 #include <map>
 #include <iostream>
 
 #include "bufr.interface.h"
-#include "BufrParser.h"
-#include "MnemonicSet.h"
+
+#include "BufrMnemonicSet.h"
 #include "IngesterData.h"
+#include "BufrTypes.h"
 #include "BufrAccumulator.h"
 
 #include "BufrOperations/BufrOperation.h"
@@ -75,7 +77,7 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
         for (auto& mnemonic : mnemonicSet.getMnemonics())
         {
             IngesterArray dataArr = operations[mnemonicSetIdx]->data(mnemonicIdx * mnemonicSet.getMaxColumn(),
-                                                                 mnemonicSet.getMaxColumn());
+                                                                 mnemonicSet.getChannels());
 
             ingesterData->add(mnemonic, dataArr);
 

@@ -3,28 +3,29 @@
 #include <sstream>
 #include <iterator>
 
-#include "MnemonicSet.h"
+#include "BufrMnemonicSet.h"
+#include "BufrTypes.h"
 
 using namespace Ingester;
 using namespace std;
 
-MnemonicSet::MnemonicSet(const string nmemonicsStr, const set<int> columnSet) :
+BufrMnemonicSet::BufrMnemonicSet(const string nmemonicsStr, const Channels channels) :
     mnemonicsStr_(nmemonicsStr),
-    columnSet_(columnSet)
+    channels_(channels)
 {
     mnemonics_ = tokenizeMnemonics(nmemonicsStr);
 
     maxColumn_ = 0;
-    for (auto col : columnSet_)
+    for (auto col : channels)
     {
-        if (col > maxColumn_)
+        if (col > (int) maxColumn_)
         {
             maxColumn_ = col;
         }
     }
 }
 
-vector<string> MnemonicSet::tokenizeMnemonics(const string& nmemonicsStr)
+vector<string> BufrMnemonicSet::tokenizeMnemonics(const string& nmemonicsStr)
 {
     //Tokenize the string into individual mnemonic strings
     istringstream buf(nmemonicsStr);

@@ -3,7 +3,8 @@
 
 #include "oops/IntSetParser.h"
 #include "BufrDescription.h"
-#include "MnemonicSet.h"
+#include "BufrMnemonicSet.h"
+#include "BufrTypes.h"
 
 
 using namespace Ingester;
@@ -19,7 +20,7 @@ BufrDescription::BufrDescription(const eckit::Configuration& conf)
 
     for (const auto& mnemonicSetConf : subConf.getSubConfigurations())
     {
-        set<int> channels;
+        Channels channels;
         if (mnemonicSetConf.has(CHANNEL_NAME))
         {
             channels = oops::parseIntSet(mnemonicSetConf.getString(CHANNEL_NAME));
@@ -29,13 +30,13 @@ BufrDescription::BufrDescription(const eckit::Configuration& conf)
             channels = {1};
         }
 
-        addMnemonicSet(MnemonicSet(mnemonicSetConf.getString(MNEMONIC_STR_YAML_NAME),
-                                   channels));
+        addMnemonicSet(BufrMnemonicSet(mnemonicSetConf.getString(MNEMONIC_STR_YAML_NAME),
+                                       channels));
 
     }
 }
 
-void BufrDescription::addMnemonicSet(MnemonicSet mnemonicSet)
+void BufrDescription::addMnemonicSet(BufrMnemonicSet mnemonicSet)
 {
     mnemonicSets_.push_back(mnemonicSet);
 }

@@ -7,7 +7,8 @@
 #include <set>
 
 #include "Eigen/Dense"
-#include "IngesterData.h"
+
+#include "BufrTypes.h"
 
 namespace Ingester
 {
@@ -20,7 +21,7 @@ namespace Ingester
 
         void addRow(double* newRow);
 
-        IngesterArray getData(Index startCol, Index numCols);
+        IngesterArray getData(Index startCol, const Channels& channels);
 
     private:
         IngesterArray dataArray_;

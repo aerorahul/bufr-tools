@@ -3,9 +3,10 @@
 //
 
 #include "BufrOperation.h"
-#include "IngesterData.h"
-#include "BufrParser/MnemonicSet.h"
+
+#include "BufrParser/BufrMnemonicSet.h"
 #include "BufrParser/BufrAccumulator.h"
+#include "BufrParser/BufrTypes.h"
 
 #pragma once
 
@@ -14,15 +15,15 @@ namespace Ingester
     class BufrRepOperation : public BufrOperation
     {
     public:
-        BufrRepOperation(const int fileUnit, MnemonicSet mnemonicSet);
+        BufrRepOperation(const int fileUnit, BufrMnemonicSet mnemonicSet);
         ~BufrRepOperation() override;
 
         void execute() override final;
-        IngesterArray data(Index startCol = 0, Index numCols = 1) override final;
+        IngesterArray data(Index startCol, const Channels& channels) override final;
 
     private:
         double *scratchData_;
         BufrAccumulator accumulator_;
-        const MnemonicSet mnemonicSet_;
+        const BufrMnemonicSet mnemonicSet_;
     };
 }

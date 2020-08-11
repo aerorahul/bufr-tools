@@ -4,12 +4,12 @@
 #include "bufr.interface.h"
 
 #include "BufrIntOperation.h"
-#include "BufrParser/MnemonicSet.h"
+#include "BufrParser/BufrMnemonicSet.h"
 
 
 using namespace Ingester;
 
-BufrIntOperation::BufrIntOperation(const int fileUnit, const MnemonicSet mnemonicSet) :
+BufrIntOperation::BufrIntOperation(const int fileUnit, const BufrMnemonicSet mnemonicSet) :
     BufrOperation(fileUnit),
     accumulator_(BufrAccumulator(mnemonicSet.getSize() * mnemonicSet.getMaxColumn())),
     mnemonicSet_(mnemonicSet)
@@ -36,7 +36,7 @@ void BufrIntOperation::execute()
     accumulator_.addRow(scratchData_);
 }
 
-IngesterArray BufrIntOperation::data(Index startCol, Index numCols)
+IngesterArray BufrIntOperation::data(Index startCol, const Channels& channels)
 {
-    return accumulator_.getData(startCol, numCols);
+    return accumulator_.getData(startCol, channels);
 }

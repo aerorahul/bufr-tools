@@ -5,13 +5,12 @@
 #include <map>
 
 #include "Eigen/Dense"
+#include "IngesterTypes.h"
 
 namespace Ingester
 {
     using namespace std;
     using namespace Eigen;
-
-    typedef Array<double, Dynamic, Dynamic, RowMajor> IngesterArray;
 
     class IngesterData
     {

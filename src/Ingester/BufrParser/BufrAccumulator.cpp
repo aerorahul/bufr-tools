@@ -4,6 +4,8 @@
 
 #include "BufrAccumulator.h"
 
+#include <iostream>
+
 using namespace Ingester;
 
 BufrAccumulator::BufrAccumulator(Index numColumns, Index blockSize) :
@@ -25,7 +27,18 @@ void BufrAccumulator::addRow(double* newRow)
     numDataRows_++;
 }
 
-IngesterArray BufrAccumulator::getData(Index startCol, Index numCols)
+IngesterArray BufrAccumulator::getData(Index startCol, const Channels& channels)
 {
-    return dataArray_.block(0, startCol, numDataRows_, numCols);
+    IngesterArray resultArr(numDataRows_, channels.size());
+    unsigned int colIdx = 0;
+    for (auto col : channels)
+    {
+        unsigned int offset = startCol + (col - 1);
+        resultArr.block(0, colIdx, numDataRows_, 1) =
+            dataArray_.block(0, offset, numDataRows_, 1);
+
+        colIdx++;
+    }
+
+    return resultArr;
 }

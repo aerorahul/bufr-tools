@@ -13,7 +13,7 @@ namespace Ingester
 {
     using namespace std;
 
-    class MnemonicSet;
+    class BufrMnemonicSet;
     class IngesterData;
     
     class BufrParser

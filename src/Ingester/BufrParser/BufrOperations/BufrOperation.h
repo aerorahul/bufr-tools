@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include <set>
+
 #include "Eigen/Dense"
-#include "IngesterData.h"
+#include "BufrParser/BufrTypes.h"
 
 namespace Ingester
 {
@@ -18,7 +20,7 @@ namespace Ingester
         virtual ~BufrOperation() = default;
 
         virtual void execute() = 0;
-        virtual IngesterArray data(Index startCol = 0, Index numCols = 1) = 0;
+        virtual IngesterArray data(Index startCol, const Channels& channels) = 0;
 
     protected:
         const int fileUnit_;

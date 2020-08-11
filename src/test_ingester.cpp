@@ -1,3 +1,4 @@
+#include <time.h>
 #include <iostream>
 
 #include <eckit/config/YAMLConfiguration.h>
@@ -5,7 +6,7 @@
 
 #include "BufrParser/BufrParser.h"
 #include "BufrParser/BufrDescription.h"
-#include "BufrParser/MnemonicSet.h"
+#include "BufrParser/BufrMnemonicSet.h"
 #include "IngesterData.h"
 
 using namespace Ingester;
@@ -30,9 +31,9 @@ void createDescriptionManually()
 {
 //    auto description = BufrDescription();
 //
-//    auto set1 = MnemonicSet("SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS", 1);
-//    auto set2 = MnemonicSet("SAZA SOZA BEARAZ SOLAZI", 1);
-//    auto set3 = MnemonicSet("TMBR", 15);
+//    auto set1 = BufrMnemonicSet("SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS", 1);
+//    auto set2 = BufrMnemonicSet("SAZA SOZA BEARAZ SOLAZI", 1);
+//    auto set3 = BufrMnemonicSet("TMBR", 15);
 //
 //    description.addMnemonicSet(set1);
 //    description.addMnemonicSet(set2);
@@ -64,7 +65,11 @@ void readDescriptionFromFile()
 
 int main(int, const char**)
 {
+    clock_t startTime = clock();
+
     readDescriptionFromFile();
+
+    printf ("Took %f seconds to run.\n", ((float)clock() - startTime)/CLOCKS_PER_SEC);
 
     return 0;
 }

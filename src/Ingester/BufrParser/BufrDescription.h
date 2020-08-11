@@ -9,7 +9,7 @@ namespace Ingester
 {
     using namespace std;
 
-    class MnemonicSet;
+    class BufrMnemonicSet;
     
     class BufrDescription
     {
@@ -17,10 +17,10 @@ namespace Ingester
         BufrDescription() = default;
         explicit BufrDescription(const eckit::Configuration& conf);
 
-        void addMnemonicSet(MnemonicSet mnemonicSet);
-        inline vector<MnemonicSet>& getMnemonicSets() { return mnemonicSets_; }
+        void addMnemonicSet(BufrMnemonicSet mnemonicSet);
+        inline vector<BufrMnemonicSet>& getMnemonicSets() { return mnemonicSets_; }
 
     private:
-        vector<MnemonicSet> mnemonicSets_;
+        vector<BufrMnemonicSet> mnemonicSets_;
     };
 }
