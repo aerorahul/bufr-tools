@@ -6,8 +6,13 @@
 
 using namespace Ingester;
 
-BufrCollector::BufrCollector(const int fileUnit) :
-    fileUnit_(fileUnit)
+BufrCollector::BufrCollector(const int fileUnit, const BufrAccumulator accumulator) :
+    fileUnit_(fileUnit),
+    accumulator_(accumulator)
 {
 }
 
+IngesterArray BufrCollector::data(Index startCol, const Channels& channels)
+{
+    return accumulator_.getData(startCol, channels);
+}

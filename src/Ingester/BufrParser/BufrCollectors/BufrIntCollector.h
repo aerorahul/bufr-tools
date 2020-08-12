@@ -20,11 +20,9 @@ namespace Ingester
 
         void collect() override final;
         inline BufrMnemonicSet getMnemonicSet() const { return mnemonicSet_; }
-        IngesterArray data(Index startCol, const Channels& channels) override final;
 
     private:
         double *scratchData_;
-        BufrAccumulator accumulator_;
         const BufrMnemonicSet mnemonicSet_;
     };
 }
