@@ -42,3 +42,8 @@ IngesterArray BufrAccumulator::getData(Index startCol, const Channels& channels)
 
     return resultArr;
 }
+
+void BufrAccumulator::reset()
+{
+    numDataRows_ = 0;
+}

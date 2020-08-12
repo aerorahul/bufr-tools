@@ -18,7 +18,9 @@ namespace Ingester
         BufrRepCollector(const int fileUnit, BufrMnemonicSet mnemonicSet);
         ~BufrRepCollector() override;
 
-        void collect() override final;
+        void collect() final;
+        IngesterArrayMap finalize() final;
+
         inline BufrMnemonicSet getMnemonicSet() const { return mnemonicSet_; }
 
     private:

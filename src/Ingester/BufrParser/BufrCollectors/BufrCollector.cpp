@@ -12,7 +12,3 @@ BufrCollector::BufrCollector(const int fileUnit, const BufrAccumulator accumulat
 {
 }
 
-IngesterArray BufrCollector::data(Index startCol, const Channels& channels)
-{
-    return accumulator_.getData(startCol, channels);
-}

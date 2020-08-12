@@ -34,3 +34,22 @@ void BufrIntCollector::collect()
 
     accumulator_.addRow(scratchData_);
 }
+
+
+IngesterArrayMap BufrIntCollector::finalize()
+{
+    IngesterArrayMap dataMap;
+    size_t fieldIdx = 0;
+    for (const auto& fieldName : mnemonicSet_.getMnemonics())
+    {
+        IngesterArray dataArr = accumulator_.getData(fieldIdx * mnemonicSet_.getMaxColumn(),
+                                                     mnemonicSet_.getChannels());
+
+        dataMap.insert({fieldName, dataArr});
+        fieldIdx++;
+    }
+
+    accumulator_.reset();
+
+    return dataMap;
+}

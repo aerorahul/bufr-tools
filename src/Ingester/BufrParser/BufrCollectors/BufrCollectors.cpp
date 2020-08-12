@@ -61,33 +61,11 @@ shared_ptr<IngesterData> BufrCollectors::finalize()
 
     for (auto* collector : collectors_)
     {
-        if (auto* intCollector = dynamic_cast<BufrIntCollector*>(collector))
+        IngesterArrayMap dataMap = collector->finalize();
+
+        for (auto const& pair : dataMap)
         {
-            unsigned int mnemonicIdx = 0;
-            BufrMnemonicSet mnemonicSet = intCollector->getMnemonicSet();
-            for (auto& mnemonic : mnemonicSet.getMnemonics())
-            {
-                IngesterArray dataArr = collector->data(mnemonicIdx * mnemonicSet.getMaxColumn(),
-                                                                              mnemonicSet.getChannels());
-
-                ingesterData->add(mnemonic, dataArr);
-
-                mnemonicIdx++;
-            }
-        }
-        else if (auto* bufrCollector = dynamic_cast<BufrRepCollector*>(collector))
-        {
-            unsigned int mnemonicIdx = 0;
-            BufrMnemonicSet mnemonicSet = bufrCollector->getMnemonicSet();
-            for (auto& mnemonic : mnemonicSet.getMnemonics())
-            {
-                IngesterArray dataArr = collector->data(mnemonicIdx * mnemonicSet.getMaxColumn(),
-                                                        mnemonicSet.getChannels());
-
-                ingesterData->add(mnemonic, dataArr);
-
-                mnemonicIdx++;
-            }
+            ingesterData->add(pair.first, pair.second);
         }
     }
 

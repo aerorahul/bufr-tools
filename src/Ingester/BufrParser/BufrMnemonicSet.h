@@ -15,7 +15,7 @@ namespace Ingester
         BufrMnemonicSet(const string mnemonics, const Channels elementSize);
 
         //Getters
-        inline vector<string>& getMnemonics() { return mnemonics_; }
+        inline vector<string> getMnemonics() const { return mnemonics_; }
         inline string getMnemonicStr() const  { return mnemonicsStr_; }
         inline Channels getChannels() const  { return channels_; }
         inline size_t getMaxColumn() const { return maxColumn_; }

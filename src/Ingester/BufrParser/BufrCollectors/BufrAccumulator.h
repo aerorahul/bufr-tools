@@ -22,6 +22,7 @@ namespace Ingester
         void addRow(double* newRow);
 
         IngesterArray getData(Index startCol, const Channels& channels);
+        void reset();
 
     private:
         IngesterArray dataArray_;

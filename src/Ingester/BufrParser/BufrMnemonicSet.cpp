@@ -11,10 +11,9 @@ using namespace std;
 
 BufrMnemonicSet::BufrMnemonicSet(const string nmemonicsStr, const Channels channels) :
     mnemonicsStr_(nmemonicsStr),
+    mnemonics_(tokenizeMnemonics(nmemonicsStr)),
     channels_(channels)
 {
-    mnemonics_ = tokenizeMnemonics(nmemonicsStr);
-
     maxColumn_ = 0;
     for (auto col : channels)
     {

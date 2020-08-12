@@ -5,6 +5,7 @@
 #pragma once
 
 #include <set>
+#include <string>
 #include "Eigen/Dense"
 
 #include "BufrParser/BufrTypes.h"
@@ -21,7 +22,7 @@ namespace Ingester
         virtual ~BufrCollector() = default;
 
         virtual void collect() = 0;
-        IngesterArray data(Index startCol, const Channels& channels);
+        virtual IngesterArrayMap finalize() = 0;
 
     protected:
         const int fileUnit_;
