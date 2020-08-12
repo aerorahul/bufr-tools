@@ -7,12 +7,9 @@
 #include "IngesterData.h"
 
 using namespace Ingester;
-using namespace Eigen;
 
-static const int FORTRAN_FILE_UNIT = 11;
 static const unsigned int SUBSET_STR_LEN = 25;
 
-//Public Methods
 
 BufrParser::BufrParser(BufrDescription& description) :
   description_(description)
@@ -46,7 +43,6 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
     return collectors.finalize();
 }
 
-//Private Methods
 int BufrParser::openBufrFile(const string& filepath)
 {
     static const int fileUnit = 11;

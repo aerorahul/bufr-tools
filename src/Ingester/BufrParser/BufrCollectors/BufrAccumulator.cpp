@@ -4,7 +4,6 @@
 
 #include "BufrAccumulator.h"
 
-#include <iostream>
 
 using namespace Ingester;
 
