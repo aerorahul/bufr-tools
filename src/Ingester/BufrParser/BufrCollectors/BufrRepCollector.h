@@ -21,8 +21,6 @@ namespace Ingester
         void collect() final;
         IngesterArrayMap finalize() final;
 
-        inline BufrMnemonicSet getMnemonicSet() const { return mnemonicSet_; }
-
     private:
         double *scratchData_;
         const BufrMnemonicSet mnemonicSet_;

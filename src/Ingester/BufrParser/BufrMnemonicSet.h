@@ -12,7 +12,7 @@ namespace Ingester
     class BufrMnemonicSet
     {
     public:
-        BufrMnemonicSet(const string mnemonics, const Channels elementSize);
+        BufrMnemonicSet(const string& mnemonics, const Channels& channels);
 
         //Getters
         inline vector<string> getMnemonics() const { return mnemonics_; }

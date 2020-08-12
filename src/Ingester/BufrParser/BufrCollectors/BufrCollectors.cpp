@@ -11,7 +11,6 @@
 #include "BufrIntCollector.h"
 
 
-
 using namespace Ingester;
 
 BufrCollectors::BufrCollectors(unsigned int fileUnit) :

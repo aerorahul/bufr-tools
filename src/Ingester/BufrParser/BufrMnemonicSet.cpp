@@ -9,7 +9,7 @@
 using namespace Ingester;
 using namespace std;
 
-BufrMnemonicSet::BufrMnemonicSet(const string nmemonicsStr, const Channels channels) :
+BufrMnemonicSet::BufrMnemonicSet(const string& nmemonicsStr, const Channels& channels) :
     mnemonicsStr_(nmemonicsStr),
     mnemonics_(tokenizeMnemonics(nmemonicsStr)),
     channels_(channels)
