@@ -13,13 +13,13 @@ namespace Ingester
 {
     using namespace Eigen;
 
-    class BufrOperation
+    class BufrCollector
     {
     public:
-        BufrOperation(const int fileUnit);
-        virtual ~BufrOperation() = default;
+        BufrCollector(const int fileUnit);
+        virtual ~BufrCollector() = default;
 
-        virtual void execute() = 0;
+        virtual void collect() = 0;
         virtual IngesterArray data(Index startCol, const Channels& channels) = 0;
 
     protected:

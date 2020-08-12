@@ -21,6 +21,6 @@ namespace Ingester
         IngesterArray get(const string& fieldName);
 
     private:
-        map<string, IngesterArray> dataMap_;
+        IngesterArrayMap dataMap_;
     };
 }

@@ -2,23 +2,24 @@
 // Created by Ronald McLaren on 8/8/20.
 //
 
-#include "BufrOperation.h"
+#include "BufrCollector.h"
 
 #include "BufrParser/BufrMnemonicSet.h"
-#include "BufrParser/BufrAccumulator.h"
+#include "BufrAccumulator.h"
 #include "BufrParser/BufrTypes.h"
 
 #pragma once
 
 namespace Ingester
 {
-    class BufrRepOperation : public BufrOperation
+    class BufrIntCollector: public BufrCollector
     {
     public:
-        BufrRepOperation(const int fileUnit, BufrMnemonicSet mnemonicSet);
-        ~BufrRepOperation() override;
+        explicit BufrIntCollector(const int fileUnit, const BufrMnemonicSet mnemonicSet);
+        ~BufrIntCollector() override;
 
-        void execute() override final;
+        void collect() override final;
+        inline BufrMnemonicSet getMnemonicSet() const { return mnemonicSet_; }
         IngesterArray data(Index startCol, const Channels& channels) override final;
 
     private:
@@ -27,3 +28,4 @@ namespace Ingester
         const BufrMnemonicSet mnemonicSet_;
     };
 }
+

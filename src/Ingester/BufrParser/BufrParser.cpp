@@ -1,28 +1,16 @@
-#include "BufrParser.h"
-
 #include <map>
-#include <iostream>
-
 #include "bufr.interface.h"
 
+#include "BufrParser.h"
+#include "BufrParser/BufrCollectors/BufrCollectors.h"
 #include "BufrMnemonicSet.h"
 #include "IngesterData.h"
-#include "BufrTypes.h"
-#include "BufrAccumulator.h"
-
-#include "BufrOperations/BufrOperation.h"
-#include "BufrOperations/BufrIntOperation.h"
-#include "BufrOperations/BufrRepOperation.h"
-
 
 using namespace Ingester;
 using namespace Eigen;
 
 static const int FORTRAN_FILE_UNIT = 11;
 static const unsigned int SUBSET_STR_LEN = 25;
-
-typedef vector<BufrOperation*> Operations;
-
 
 //Public Methods
 
@@ -36,18 +24,8 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
     //Parse the BUFR file
     const int fileUnit = openBufrFile(filepath);
 
-    Operations operations;
-    for (auto& mnemonicSet : description_.getMnemonicSets())
-    {
-        if (mnemonicSet.getMaxColumn() == 1)
-        {
-            operations.push_back(new BufrIntOperation(fileUnit, mnemonicSet));
-        }
-        else
-        {
-            operations.push_back(new BufrRepOperation(fileUnit, mnemonicSet));
-        }
-    }
+    auto collectors = BufrCollectors(fileUnit);
+    collectors.addMnemonicSets(description_.getMnemonicSets());
 
     char subset[SUBSET_STR_LEN];
     int iddate;
@@ -57,10 +35,7 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
     {
         while (ireadsb_f(fileUnit) == 0)
         {
-            for (auto& op : operations)
-            {
-                op->execute();
-            }
+            collectors.collect();
         }
 
         if (messagesToParse > 0 && ++messageNum >= messagesToParse) break;
@@ -68,30 +43,7 @@ shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigne
 
     closeBufrFile(fileUnit);
 
-    //Create the IngesterData objeect
-    auto ingesterData = make_shared<IngesterData>();
-    unsigned int mnemonicSetIdx = 0;
-    for (auto& mnemonicSet : description_.getMnemonicSets())
-    {
-        unsigned int mnemonicIdx = 0;
-        for (auto& mnemonic : mnemonicSet.getMnemonics())
-        {
-            IngesterArray dataArr = operations[mnemonicSetIdx]->data(mnemonicIdx * mnemonicSet.getMaxColumn(),
-                                                                 mnemonicSet.getChannels());
-
-            ingesterData->add(mnemonic, dataArr);
-
-            mnemonicIdx++;
-        }
-        mnemonicSetIdx++;
-    }
-
-    for (auto* operation : operations)
-    {
-        delete operation;
-    }
-
-    return ingesterData;
+    return collectors.finalize();
 }
 
 //Private Methods

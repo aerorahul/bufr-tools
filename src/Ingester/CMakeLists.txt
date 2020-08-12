@@ -13,18 +13,18 @@ list(APPEND INGESTER_SRCS
     oops/IntSetParser.h
     # IodaEncoder/ObsGroupDescription.cpp
     # IodaEncoder/ObsGroupDescription.h
-    BufrParser/BufrAccumulator.cpp
-    BufrParser/BufrAccumulator.h
+        BufrParser/BufrCollectors/BufrAccumulator.cpp
+        BufrParser/BufrCollectors/BufrAccumulator.h
 
-    BufrParser/BufrOperations/BufrOperation.cpp
-    BufrParser/BufrOperations/BufrOperation.h
-    BufrParser/BufrOperations/BufrIntOperation.cpp
-    BufrParser/BufrOperations/BufrIntOperation.h
-    BufrParser/BufrOperations/BufrRepOperation.cpp
-    BufrParser/BufrOperations/BufrRepOperation.h
+        BufrParser/BufrCollectors/BufrCollector.cpp
+        BufrParser/BufrCollectors/BufrCollector.h
+        BufrParser/BufrCollectors/BufrIntCollector.cpp
+        BufrParser/BufrCollectors/BufrIntCollector.h
+        BufrParser/BufrCollectors/BufrRepCollector.cpp
+        BufrParser/BufrCollectors/BufrRepCollector.h
 )
 
-add_library(ingester ${INGESTER_SRCS} BufrParser/BufrTypes.h IngesterTypes.h)
+add_library(ingester ${INGESTER_SRCS} BufrParser/BufrTypes.h IngesterTypes.h BufrParser/BufrCollectors/BufrCollectors.cpp BufrParser/BufrCollectors/BufrCollectors.h)
 target_link_libraries(ingester PUBLIC Eigen3::Eigen)
 target_link_libraries(ingester PUBLIC eckit)
 target_link_libraries(ingester PRIVATE bufr::bufr_4_DA)

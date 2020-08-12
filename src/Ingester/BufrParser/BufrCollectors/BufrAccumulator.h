@@ -8,7 +8,7 @@
 
 #include "Eigen/Dense"
 
-#include "BufrTypes.h"
+#include "BufrParser/BufrTypes.h"
 
 namespace Ingester
 {
