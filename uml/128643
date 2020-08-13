@@ -1,6 +1,6 @@
 format 222
 "Ingester" // Ingester
-  revision 3
+  revision 4
   modified_by 3 "rmclaren"
   // class settings
   
@@ -112,6 +112,22 @@ ${inlines}
 	idl_decl ""
 	mysql_decl ""
 	MysqlColumn
+      end
+
+      classrelation 144643 // <dependency>
+	relation 144515 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 144643 // <dependency>
+	  b parent class_ref 135299 // IngesterArray
+      end
+
+      classrelation 144771 // <dependency>
+	relation 144643 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 144771 // <dependency>
+	  b parent class_ref 149763 // IngesterArrayMap
       end
     end
 

@@ -32,12 +32,16 @@ relationcanvas 129411 relation_ref 137603 // <directional composition>
   multiplicity_a_pos 838 232 3000 multiplicity_b_pos 821 232 3000
 end
 relationcanvas 129667 relation_ref 137731 // <realization>
-  from ref 128259 z 2001 to ref 128131
+  from ref 128259 z 2001 to point 504 322
+  line 130307 z 2001 to point 628 321
+  line 129923 z 2001 to ref 128131
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129795 relation_ref 137859 // <realization>
-  from ref 128387 z 2001 to ref 128131
+  from ref 128387 z 2001 to point 740 322
+  line 130179 z 2001 to point 628 322
+  line 130051 z 2001 to ref 128131
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

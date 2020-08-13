@@ -1,6 +1,6 @@
 format 222
 "BufrCollectors" // Ingester::Bufr Parser::BufrCollectors
-  revision 1
+  revision 2
   modified_by 3 "rmclaren"
   // class settings
   

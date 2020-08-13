@@ -23,7 +23,7 @@ BufrParser::~BufrParser()
     closeBufrFile(fileUnit_);
 }
 
-shared_ptr<IngesterData> BufrParser::parse(const unsigned int maxMessagesToParse)
+shared_ptr<IngesterData> BufrParser::parse(const size_t maxMsgsToParse)
 {
     assert(fileUnit_ > 0);
 
@@ -41,7 +41,7 @@ shared_ptr<IngesterData> BufrParser::parse(const unsigned int maxMessagesToParse
             collectors.collect();
         }
 
-        if (maxMessagesToParse > 0 && ++messageNum >= maxMessagesToParse) break;
+        if (maxMsgsToParse > 0 && ++messageNum >= maxMsgsToParse) break;
     }
 
     return collectors.finalize();

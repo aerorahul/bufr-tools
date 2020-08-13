@@ -1,6 +1,6 @@
 format 222
 "Eigen" // Eigen
-  revision 2
+  revision 3
   modified_by 3 "rmclaren"
   // class settings
   
@@ -55,16 +55,15 @@ format 222
       size A4
     end
 
-    class 135299 "ArrayXXf"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
-${inlines}
+    class 135299 "IngesterArray"
+      visibility package stereotype "typedef" explicit_base_type ""
+      cpp_decl "${comment}typedef ${type} ${name};
 "
       java_decl ""
       php_decl ""
       python_2_2 python_decl ""
-      idl_decl ""
+      idl_decl "${comment}typedef ${type} ${name};
+"
       explicit_switch_type ""
       mysql_decl ""
       

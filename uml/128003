@@ -1,6 +1,6 @@
 format 222
 "Bufr Parser" // Ingester::Bufr Parser
-  revision 4
+  revision 5
   modified_by 3 "rmclaren"
   // class settings
   
@@ -108,10 +108,11 @@ ${inlines}
       operation 128131 "parse"
 	public return_type class_ref 135171 // IngesterData
 	nparams 1
-	  param in name "bufrFilePath" explicit_type "string"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+	  param in name "maxMsgsToParse" explicit_type "size_t"
+	    defaultvalue "0"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
 "
-	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${throw}${staticnl}{
   ${body}}
 "
 	
@@ -125,7 +126,7 @@ ${inlines}
 	  a public
 	    cpp default "#include in source"
 	    classrelation_ref 129411 // <dependency>
-	  b parent class_ref 135299 // ArrayXXf
+	  b parent class_ref 135299 // IngesterArray
       end
 
       classrelation 129667 // <directional composition>
@@ -152,20 +153,6 @@ ${inlines}
 	    cpp default "#include in source"
 	    classrelation_ref 130179 // <dependency>
 	  b parent class_ref 135555 // bufr.interface
-      end
-
-      operation 130563 "resolveLatLon"
-	private explicit_return_type ""
-	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-	
-	
       end
 
       classrelation 138115 // <unidirectional association>
@@ -326,10 +313,36 @@ ${inlines}
 	MysqlColumn
       end
 
-      operation 130179 "parseYamlFile"
-	private explicit_return_type ""
+      attribute 143875 "filepath_"
+	private explicit_type "string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 146051 "getFilepath"
+	public explicit_return_type "string"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 146179 "setFilepath"
+	public explicit_return_type ""
 	nparams 1
-	  param in name "fillepath" explicit_type "string"
+	  param in name "filepath" explicit_type "string"
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
 "
 	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
@@ -340,6 +353,20 @@ ${inlines}
 	
 	
       end
+    end
+
+    class 149763 "IngesterArrayMap"
+      visibility package stereotype "typedef" explicit_base_type ""
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl "${comment}typedef ${type} ${name};
+"
+      explicit_switch_type ""
+      mysql_decl ""
+      
     end
   end
 

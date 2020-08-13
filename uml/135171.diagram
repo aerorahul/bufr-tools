@@ -98,7 +98,7 @@ msg 129667 synchronous
 msg 130179 synchronous
   from durationcanvas_ref 128259
   to durationcanvas_ref 130051
-  yz 419 2015 msg operation_ref 128131 // "parse(in bufrFilePath : string) : IngesterData"
+  yz 419 2015 msg operation_ref 128131 // "parse(in maxMsgsToParse : size_t = 0) : IngesterData"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
   args "bufrFilepath"
   label_xy 229 409

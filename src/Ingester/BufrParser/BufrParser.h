@@ -21,7 +21,7 @@ namespace Ingester
     public:
         explicit BufrParser(BufrDescription& description);
         ~BufrParser();
-        shared_ptr<IngesterData> parse(const unsigned int maxMessagesToParse=0);
+        shared_ptr<IngesterData> parse(const size_t maxMsgsToParse=0);
 
     private:
         BufrDescription description_;
