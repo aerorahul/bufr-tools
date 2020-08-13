@@ -6,11 +6,9 @@
 
 namespace Ingester
 {
-    using namespace std;
-
-    typedef string FieldName;
-    typedef string ObsGroupName;
-    typedef map<string, string> NameMap;
+    typedef std::string FieldName;
+    typedef std::string ObsGroupName;
+    typedef std::map<std::string, std::string> NameMap;
 
     class ObsGroupDescription
     {

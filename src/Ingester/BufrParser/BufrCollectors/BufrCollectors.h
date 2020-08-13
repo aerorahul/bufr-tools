@@ -12,8 +12,6 @@
 
 namespace Ingester
 {
-    using namespace std;
-
     class BufrMnemonicSet;
     class BufrAccumulator;
     class BufrCollector;
@@ -25,13 +23,13 @@ namespace Ingester
         explicit BufrCollectors(unsigned int fileUnit);
         ~BufrCollectors();
 
-        void addMnemonicSets(const vector<BufrMnemonicSet>& mnemonicSets);
+        void addMnemonicSets(const std::vector<BufrMnemonicSet>& mnemonicSets);
         void addMnemonicSet(const BufrMnemonicSet& mnemonicSet);
         void collect();
-        shared_ptr<IngesterData> finalize();
+        std::shared_ptr<IngesterData> finalize();
 
     private:
         unsigned int fileUnit_;
-        vector<BufrCollector*> collectors_;
+        std::vector<BufrCollector*> collectors_;
     };
 }

@@ -7,24 +7,22 @@
 
 namespace Ingester
 {
-    using namespace std;
-
     class BufrMnemonicSet;
     
     class BufrDescription
     {
     public: 
         BufrDescription() = default;
-        explicit BufrDescription(const eckit::Configuration& conf, const string& basePath);
+        explicit BufrDescription(const eckit::Configuration& conf, const std::string& basePath);
 
         void addMnemonicSet(BufrMnemonicSet mnemonicSet);
 
-        inline void setFilepath(const string& filepath) { filepath_ = filepath; }
-        inline vector<BufrMnemonicSet>& getMnemonicSets() { return mnemonicSets_; }
-        inline string filepath() { return filepath_; }
+        inline void setFilepath(const std::string& filepath) { filepath_ = filepath; }
+        inline std::vector<BufrMnemonicSet>& getMnemonicSets() { return mnemonicSets_; }
+        inline std::string filepath() { return filepath_; }
 
     private:
-        vector<BufrMnemonicSet> mnemonicSets_;
-        string filepath_;
+        std::vector<BufrMnemonicSet> mnemonicSets_;
+        std::string filepath_;
     };
 }

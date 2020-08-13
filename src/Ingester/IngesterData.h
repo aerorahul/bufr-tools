@@ -9,16 +9,13 @@
 
 namespace Ingester
 {
-    using namespace std;
-    using namespace Eigen;
-
     class IngesterData
     {
     public:
         IngesterData() = default;
 
-        void add(const string& fieldName, const IngesterArray& data);
-        IngesterArray get(const string& fieldName);
+        void add(const std::string& fieldName, const IngesterArray& data);
+        IngesterArray get(const std::string& fieldName);
         size_t size() const;
 
     private:

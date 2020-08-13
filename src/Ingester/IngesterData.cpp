@@ -4,6 +4,7 @@
 
 
 using namespace Ingester;
+using namespace std;
 
 void IngesterData::add(const string& fieldName, const IngesterArray& data)
 {

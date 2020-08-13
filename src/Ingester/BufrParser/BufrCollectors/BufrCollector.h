@@ -13,8 +13,6 @@
 
 namespace Ingester
 {
-    using namespace Eigen;
-
     class BufrCollector
     {
     public:

@@ -11,8 +11,6 @@
 
 namespace Ingester
 {
-    using namespace std;
-
     class BufrMnemonicSet;
     class IngesterData;
     
@@ -21,13 +19,13 @@ namespace Ingester
     public:
         explicit BufrParser(BufrDescription& description);
         ~BufrParser();
-        shared_ptr<IngesterData> parse(const size_t maxMsgsToParse=0);
+        std::shared_ptr<IngesterData> parse(const size_t maxMsgsToParse=0);
 
     private:
         BufrDescription description_;
         unsigned int fileUnit_;
 
-        int openBufrFile(const string& filepath);
-        void closeBufrFile(const unsigned int fileUnit);
+        int openBufrFile(const std::string& filepath);
+        void closeBufrFile(const int fileUnit);
     };
 }

@@ -6,6 +6,7 @@
 
 
 using namespace Ingester;
+using namespace Eigen;
 
 BufrAccumulator::BufrAccumulator(Index numColumns, Index blockSize) :
     dataArray_(blockSize, numColumns),

@@ -7,26 +7,24 @@
 
 namespace Ingester
 {
-    using namespace std;
-
     class BufrMnemonicSet
     {
     public:
-        BufrMnemonicSet(const string& mnemonics, const Channels& channels);
+        BufrMnemonicSet(const std::string& mnemonics, const Channels& channels);
 
         //Getters
-        inline vector<string> getMnemonics() const { return mnemonics_; }
-        inline string getMnemonicStr() const  { return mnemonicsStr_; }
+        inline std::vector<std::string> getMnemonics() const { return mnemonics_; }
+        inline std::string getMnemonicStr() const  { return mnemonicsStr_; }
         inline Channels getChannels() const  { return channels_; }
         inline size_t getMaxColumn() const { return maxColumn_; }
         inline size_t getSize() const  { return mnemonics_.size(); }
 
     private:
-        string mnemonicsStr_;
-        vector<string> mnemonics_;
+        std::string mnemonicsStr_;
+        std::vector<std::string> mnemonics_;
         Channels channels_;
         size_t maxColumn_;
 
-        static std::vector<string> tokenizeMnemonics(const string& mnemonics);
+        static std::vector<std::string> tokenizeMnemonics(const std::string& mnemonics);
     };
 }

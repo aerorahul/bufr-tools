@@ -7,6 +7,7 @@
 #include "IngesterData.h"
 
 using namespace Ingester;
+using namespace std;
 
 static const unsigned int SUBSET_STR_LEN = 25;
 
@@ -57,7 +58,7 @@ int BufrParser::openBufrFile(const string& filepath)
     return fileUnit;
 }
 
-void BufrParser::closeBufrFile(const unsigned int fileUnit)
+void BufrParser::closeBufrFile(const int fileUnit)
 {
     closbf_f(fileUnit);
     close_f(fileUnit);
