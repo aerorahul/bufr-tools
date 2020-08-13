@@ -1,5 +1,6 @@
 #include <time.h>
 #include <iostream>
+#include <iomanip>
 
 #include <eckit/config/YAMLConfiguration.h>
 #include <eckit/filesystem/PathName.h>
@@ -117,7 +118,7 @@ int main(int, const char**)
 
     test_createDescriptionManually();
 
-    printf ("Took %f seconds to run.\n", ((float)clock() - startTime)/CLOCKS_PER_SEC);
+    cout << "Took " << setprecision(2) << ((float)clock() - startTime)/CLOCKS_PER_SEC << " seconds to run." << endl;
 
     return 0;
 }
