@@ -44,11 +44,11 @@ void test_createDescriptionManually()
 
 void test_parsePartialFile()
 {
-    auto yaml = YAMLConfiguration(PathName(CONFIG_FILE));
+    auto yaml = new YAMLConfiguration(PathName(CONFIG_FILE));
 
-    auto dataPath = yaml.getString("dataBasepath");
+    auto dataPath = yaml->getString("dataBasepath");
 
-    for (const auto& conf : yaml.getSubConfigurations("bufrData"))
+    for (const auto& conf : yaml->getSubConfigurations("bufrData"))
     {
         auto description = BufrDescription(conf, dataPath);
         auto bufrParser = BufrParser(description);
@@ -57,30 +57,34 @@ void test_parsePartialFile()
 
         cout << data->get("TMBR") << endl;
     }
+
+    delete yaml;
 }
 
 void test_parseWholeFile()
 {
-    auto yaml = YAMLConfiguration(PathName(CONFIG_FILE));
+    auto yaml = new YAMLConfiguration(PathName(CONFIG_FILE));
 
-    auto dataPath = yaml.getString("dataBasepath");
+    auto dataPath = yaml->getString("dataBasepath");
 
-    for (const auto& conf : yaml.getSubConfigurations("bufrData"))
+    for (const auto& conf : yaml->getSubConfigurations("bufrData"))
     {
         auto description = BufrDescription(conf, dataPath);
         auto bufrParser = BufrParser(description);
 
         shared_ptr<IngesterData> data = bufrParser.parse();
     }
+
+    delete yaml;
 }
 
 void test_parseFileIncrementally()
 {
-    auto yaml = YAMLConfiguration(PathName(CONFIG_FILE));
+    auto yaml = new YAMLConfiguration(PathName(CONFIG_FILE));
 
-    auto dataPath = yaml.getString("dataBasepath");
+    auto dataPath = yaml->getString("dataBasepath");
 
-    for (const auto& conf : yaml.getSubConfigurations("bufrData"))
+    for (const auto& conf : yaml->getSubConfigurations("bufrData"))
     {
         auto description = BufrDescription(conf, dataPath);
         auto bufrParser = BufrParser(description);
@@ -103,6 +107,8 @@ void test_parseFileIncrementally()
 
         cout << data->get("TMBR") << endl;
     }
+
+    delete yaml;
 }
 
 int main(int, const char**)

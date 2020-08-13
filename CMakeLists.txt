@@ -4,7 +4,7 @@ project(bufrtools
         VERSION 0.0.1
         LANGUAGES C CXX Fortran)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_DIRECTORY_LABELS "bufr-tool")
 
 include(GNUInstallDirs)
