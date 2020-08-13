@@ -14,10 +14,16 @@ fragment 129795 "Init"
   xyzwh 82 65 2015 579 286
 end
 fragment 129923 "Processing"
-  xyzwh 80 372 2015 577 190
+  xyzwh 82 373 2015 936 417
 end
+classinstance 130819 class_ref 142723 // BufrCollectors
+  name ""   xyz 723 383 2000 life_line_z 2000
+classinstance 131203 class_ref 142851 // BufrCollector
+  name ""   xyz 827 383 2000 life_line_z 2000
+classinstance 132611 class_ref 143235 // BufrAccumulator
+  name ""   xyz 918 384 2000 life_line_z 2000
 durationcanvas 128259 classinstance_ref 128003 // :Pipeline
-  xyzwh 138 80 2010 11 482
+  xyzwh 138 80 2010 11 567
 end
 durationcanvas 128387 classinstance_ref 128131 // bufrDesc:BufrDescription
   xyzwh 257 139 2010 11 26
@@ -32,10 +38,34 @@ durationcanvas 129539 classinstance_ref 129411 // encoder:IodaEncoder
   xyzwh 557 278 2010 11 26
 end
 durationcanvas 130051 classinstance_ref 128643 // parser:BufrParser
-  xyzwh 342 418 2010 11 34
+  xyzwh 342 419 2010 11 146
 end
 durationcanvas 130435 classinstance_ref 129411 // encoder:IodaEncoder
-  xyzwh 557 488 2010 11 38
+  xyzwh 557 599 2010 11 38
+end
+durationcanvas 130947 classinstance_ref 130819 // :BufrCollectors
+  xyzwh 756 468 2010 11 25
+end
+durationcanvas 131587 classinstance_ref 130819 // :BufrCollectors
+  xyzwh 756 431 2010 11 25
+end
+durationcanvas 131843 classinstance_ref 131203 // :BufrCollector
+  xyzwh 857 474 2010 11 25
+end
+durationcanvas 132099 classinstance_ref 130819 // :BufrCollectors
+  xyzwh 756 505 2010 11 48
+end
+durationcanvas 132355 classinstance_ref 131203 // :BufrCollector
+  xyzwh 857 434 2010 11 25
+end
+durationcanvas 132739 classinstance_ref 132611 // :BufrAccumulator
+  xyzwh 957 434 2010 11 25
+end
+durationcanvas 132995 classinstance_ref 132611 // :BufrAccumulator
+  xyzwh 957 481 2010 11 25
+end
+durationcanvas 133251 classinstance_ref 131203 // :BufrCollector
+  xyzwh 857 514 2010 11 26
 end
 msg 128515 synchronous
   from durationcanvas_ref 128259
@@ -68,27 +98,85 @@ msg 129667 synchronous
 msg 130179 synchronous
   from durationcanvas_ref 128259
   to durationcanvas_ref 130051
-  yz 418 2015 msg operation_ref 128131 // "parse(in bufrFilePath : string) : IngesterData"
+  yz 419 2015 msg operation_ref 128131 // "parse(in bufrFilePath : string) : IngesterData"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
   args "bufrFilepath"
-  label_xy 229 408
+  label_xy 229 409
 msg 130307 return
   from durationcanvas_ref 130051
   to durationcanvas_ref 128259
-  yz 440 2015 explicitmsg "ingesterData"
+  yz 441 2015 explicitmsg "ingesterData"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
-  label_xy 158 435
+  label_xy 158 436
 msg 130563 synchronous
   from durationcanvas_ref 128259
   to durationcanvas_ref 130435
-  yz 488 2015 msg operation_ref 130947 // "createObsGroup(in ingesterData : IngesterData) : ObsGroup"
+  yz 599 2015 msg operation_ref 130947 // "createObsGroup(in ingesterData : IngesterData) : ObsGroup"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
   args "ingestreData"
-  label_xy 289 477
+  label_xy 290 588
 msg 130691 return
   from durationcanvas_ref 130435
   to durationcanvas_ref 128259
-  yz 513 2020 explicitmsg "obsGroup"
+  yz 624 2020 explicitmsg "obsGroup"
   show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
-  label_xy 161 507
+  label_xy 162 618
+msg 131075 synchronous
+  from durationcanvas_ref 130051
+  to durationcanvas_ref 130947
+  yz 468 2015 msg operation_ref 137731 // "collect()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 537 458
+msg 131715 synchronous
+  from durationcanvas_ref 130051
+  to durationcanvas_ref 131587
+  yz 432 3005 msg operation_ref 137603 // "BufrCollectors(in fileUnit : unsigned int)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 519 422
+msg 131971 synchronous
+  from durationcanvas_ref 130947
+  to durationcanvas_ref 131843
+  yz 474 2020 msg operation_ref 138243 // "collect() : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 797 465
+msg 132227 synchronous
+  from durationcanvas_ref 130051
+  to durationcanvas_ref 132099
+  yz 505 2015 msg operation_ref 137859 // "finalize() : shared_ptr<IngesterData>"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 535 495
+msg 132483 synchronous
+  from durationcanvas_ref 131587
+  to durationcanvas_ref 132355
+  yz 434 3010 msg operation_ref 138499 // "BufrCollector(in fileUnit_ : const int, in accumulator : const BufrAccumulator)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 780 424
+msg 132867 synchronous
+  from durationcanvas_ref 132355
+  to durationcanvas_ref 132739
+  yz 434 2015 msg operation_ref 138627 // "BufrAccumulator(in numColumns : Index, in blockSize : Index = 50000)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 874 424
+msg 133123 synchronous
+  from durationcanvas_ref 131843
+  to durationcanvas_ref 132995
+  yz 481 2015 msg operation_ref 138755 // "addRow(in newRow : double*)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 890 471
+msg 133379 synchronous
+  from durationcanvas_ref 132099
+  to durationcanvas_ref 133251
+  yz 514 2020 msg operation_ref 138371 // "finalize() : IngesterArrayMap"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 793 504
+msg 133507 return
+  from durationcanvas_ref 133251
+  to durationcanvas_ref 132099
+  yz 529 2015 unspecifiedmsg
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+msg 133635 return
+  from durationcanvas_ref 132099
+  to durationcanvas_ref 130051
+  yz 542 2020 unspecifiedmsg
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
 end

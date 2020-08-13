@@ -3,14 +3,20 @@ cleanlooks_style
 diagrams
   classdiagram_ref 128003 // BufrFile
     1237 730 100 Letter-Landscape 0 0
-  active  classdiagram_ref 134915 // Classes
+  classdiagram_ref 134915 // Classes
     1041 697 100 Letter-Landscape 0 0
+  classdiagram_ref 134531 // Packages
+    950 664 100 A4 0 0
+  classdiagram_ref 141699 // Classes
+    1234 832 100 Legal-Landscape 0 0
+  active  sequencediagram_ref 135171 // Setting Up Pipeline And Parsing Bufr File
+    1194 837 100 Legal-Landscape 78 74
 end
 show_stereotypes
-selected classdiagram_ref 134915 // Classes
+selected sequencediagram_ref 135171 // Setting Up Pipeline And Parsing Bufr File
 open
   classview_ref 134531 // High Level Organization
-  classview_ref 135043 // IodaEncoder
+  classview_ref 141699 // Classes
   classview_ref 134787 // Classes
 end
 end

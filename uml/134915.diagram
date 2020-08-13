@@ -28,7 +28,7 @@ relationcanvas 128515 relation_ref 130563 // <directional aggregation>
   multiplicity_a_pos 524 244 3000 no_multiplicity_b
 end
 relationcanvas 128899 relation_ref 130691 // <unidirectional association>
-  from ref 128003 z 2001 stereotype "<<creates>>" xyz 301.5 311.5 3000 to ref 128771
+  from ref 128003 z 2001 stereotype "<<creates>>" xyz 301 311 3000 to ref 128771
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

@@ -1,6 +1,6 @@
 format 222
 "Bufr Parser" // Ingester::Bufr Parser
-  revision 3
+  revision 4
   modified_by 3 "rmclaren"
   // class settings
   
@@ -166,6 +166,16 @@ ${inlines}
 	
 	
 	
+      end
+
+      classrelation 138115 // <unidirectional association>
+	relation 137987 --->
+	  stereotype "uses"
+	  a role_name "" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 138115 // <unidirectional association>
+	  b parent class_ref 142723 // BufrCollectors
       end
     end
 
@@ -338,4 +348,6 @@ ${inlines}
       on 
       package_ref 128259 // NCEPLIB-bufr
   end
+
+  package_ref 135555 // BufrCollectors
 end

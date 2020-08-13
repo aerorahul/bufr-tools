@@ -6,11 +6,11 @@ classcanvas 128003 class_ref 128003 // BufrParser
 end
 classcanvas 128131 class_ref 134531 // NmemonicSet
   classdiagramsettings member_max_width 0 end
-  xyz 462 390 2000
+  xyz 648 347 2000
 end
 classcanvas 130179 class_ref 135171 // IngesterData
   classdiagramsettings member_max_width 0 end
-  xyz 110 397 2000
+  xyz 81 359 2000
 end
 classcanvas 130435 class_ref 135299 // ArrayXXf
   classdiagramsettings hide_attributes yes hide_operations yes hide_getset_operations yes hide_ports yes member_max_width 0 end
@@ -19,15 +19,19 @@ classcanvas 130435 class_ref 135299 // ArrayXXf
 end
 classcanvas 131331 class_ref 135427 // BufrDescription
   classdiagramsettings member_max_width 0 end
-  xyz 507 124 2000
+  xyz 696 130 2000
 end
 classcanvas 132355 class_ref 135555 // bufr.interface
   classdiagramsettings hide_attributes yes hide_operations yes hide_getset_operations yes hide_ports yes show_members_full_definition no show_members_visibility no show_members_initialization no show_attribute_modifiers no member_max_width 0 end
   color verylightorange
   xyz 229 42 2000
 end
+classcanvas 132611 class_ref 142723 // BufrCollectors
+  classdiagramsettings hide_attributes yes hide_operations yes member_max_width 0 end
+  xyz 402 89 2005
+end
 relationcanvas 130307 relation_ref 129155 // <unidirectional association>
-  from ref 128003 z 2001 stereotype "<<creates>>" xyz 213 342 3000 to ref 130179
+  from ref 128003 z 2001 stereotype "<<creates>>" xyz 213 323 3000 to ref 130179
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
@@ -40,16 +44,21 @@ end
 relationcanvas 131459 relation_ref 129539 // <directional composition>
   from ref 131331 z 2001 to ref 128131
   no_role_a no_role_b
-  multiplicity_a_pos 609 376 3000 no_multiplicity_b
+  multiplicity_a_pos 796 333 3000 no_multiplicity_b
 end
 relationcanvas 132099 relation_ref 129923 // <directional composition>
   from ref 128003 z 2001 to point 389 167
   line 132227 z 2001 to ref 131331
   no_role_a no_role_b
-  multiplicity_a_pos 490 172 3000 no_multiplicity_b
+  multiplicity_a_pos 679 175 3000 no_multiplicity_b
 end
 relationcanvas 132483 relation_ref 130051 // <dependency>
   from ref 128003 z 2001 to ref 132355
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 132739 relation_ref 137987 // <unidirectional association>
+  from ref 128003 z 2006 stereotype "<<uses>>" xyz 337 100 3000 to ref 132611
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

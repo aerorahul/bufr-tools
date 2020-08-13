@@ -1,0 +1,44 @@
+format 222
+
+classcanvas 128003 class_ref 142723 // BufrCollectors
+  classdiagramsettings member_max_width 0 end
+  xyz 35 181 2000
+end
+classcanvas 128131 class_ref 142851 // BufrCollector
+  classdiagramsettings member_max_width 0 end
+  xyz 453 188 2000
+end
+classcanvas 128259 class_ref 142979 // BufrIntCollector
+  classdiagramsettings member_max_width 0 end
+  xyz 418 377 2000
+end
+classcanvas 128387 class_ref 143107 // BufrRepCollector
+  classdiagramsettings member_max_width 0 end
+  xyz 656 376 2000
+end
+classcanvas 129283 class_ref 143235 // BufrAccumulator
+  classdiagramsettings member_max_width 0 end
+  xyz 855 173 2000
+end
+relationcanvas 128899 relation_ref 137475 // <directional composition>
+  from ref 128003 z 2001 to ref 128131
+  no_role_a no_role_b
+  multiplicity_a_pos 427 233 3000 multiplicity_b_pos 395 233 3000
+end
+relationcanvas 129411 relation_ref 137603 // <directional composition>
+  decenter_begin 478
+  from ref 128131 z 2001 to ref 129283
+  no_role_a no_role_b
+  multiplicity_a_pos 838 232 3000 multiplicity_b_pos 821 232 3000
+end
+relationcanvas 129667 relation_ref 137731 // <realization>
+  from ref 128259 z 2001 to ref 128131
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129795 relation_ref 137859 // <realization>
+  from ref 128387 z 2001 to ref 128131
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

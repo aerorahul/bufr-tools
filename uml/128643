@@ -1,6 +1,6 @@
 format 222
 "Ingester" // Ingester
-  revision 2
+  revision 3
   modified_by 3 "rmclaren"
   // class settings
   
@@ -88,7 +88,7 @@ ${inlines}
       mysql_decl ""
       
       operation 128899 "get"
-	public return_type class_ref 135299 // ArrayXXf
+	public explicit_return_type "IngesterArray  [Eigen]"
 	nparams 1
 	  param in name "fieldName" explicit_type "string"
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
@@ -103,7 +103,7 @@ ${inlines}
       end
 
       attribute 128515 "data"
-	private explicit_type "map<string, ArrayXXf>"
+	private explicit_type "IngesterArrayMap"
 	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -117,7 +117,7 @@ ${inlines}
 
     sequencediagram 135171 "Setting Up Pipeline And Parsing Bufr File"
       sequencediagramsettings show_full_operations_definition no show_class_of_operation no end
-      overlapping_bars size A4
+      overlapping_bars size Legal-Landscape
     end
 
     class 136195 "Pipeline"
