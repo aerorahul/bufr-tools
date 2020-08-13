@@ -10,12 +10,22 @@
 using namespace Ingester;
 using namespace std;
 
+const string PATH_SEPERATOR =
+#if defined _WIN32 || defined __CYGWIN__
+    "\\";
+#else
+    "/";
+#endif
+
+
+const string FILENAME = "filename";
 const string MNEMONIC_SETS_YAML_SECTION = "mnemonicSets";
 const string MNEMONIC_STR_YAML_NAME = "mnemonics";
 const string CHANNEL_NAME = "channels";
 
-BufrDescription::BufrDescription(const eckit::Configuration& conf)
+BufrDescription::BufrDescription(const eckit::Configuration& conf, const string& basePath)
 {
+    setFilepath(basePath + PATH_SEPERATOR + conf.getString(FILENAME));
     auto subConf = conf.getSubConfiguration(MNEMONIC_SETS_YAML_SECTION);
 
     for (const auto& mnemonicSetConf : subConf.getSubConfigurations())

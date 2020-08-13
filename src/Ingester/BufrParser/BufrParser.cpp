@@ -12,33 +12,37 @@ static const unsigned int SUBSET_STR_LEN = 25;
 
 
 BufrParser::BufrParser(BufrDescription& description) :
-  description_(description)
+  description_(description),
+  fileUnit_(0)
 {
+    fileUnit_ = openBufrFile(description_.filepath());
 }
 
-shared_ptr<IngesterData> BufrParser::parse(const string& filepath, const unsigned int messagesToParse)
+BufrParser::~BufrParser()
 {
-    //Parse the BUFR file
-    const int fileUnit = openBufrFile(filepath);
+    closeBufrFile(fileUnit_);
+}
 
-    auto collectors = BufrCollectors(fileUnit);
+shared_ptr<IngesterData> BufrParser::parse(const unsigned int maxMessagesToParse)
+{
+    assert(fileUnit_ > 0);
+
+    auto collectors = BufrCollectors(fileUnit_);
     collectors.addMnemonicSets(description_.getMnemonicSets());
 
     char subset[SUBSET_STR_LEN];
     int iddate;
 
     unsigned int messageNum = 0;
-    while (ireadmg_f(fileUnit, subset, &iddate, SUBSET_STR_LEN) == 0)
+    while (ireadmg_f(fileUnit_, subset, &iddate, SUBSET_STR_LEN) == 0)
     {
-        while (ireadsb_f(fileUnit) == 0)
+        while (ireadsb_f(fileUnit_) == 0)
         {
             collectors.collect();
         }
 
-        if (messagesToParse > 0 && ++messageNum >= messagesToParse) break;
+        if (maxMessagesToParse > 0 && ++messageNum >= maxMessagesToParse) break;
     }
-
-    closeBufrFile(fileUnit);
 
     return collectors.finalize();
 }

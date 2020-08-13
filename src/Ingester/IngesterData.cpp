@@ -25,3 +25,14 @@ IngesterArray IngesterData::get(const string& fieldName)
 
     return dataMap_[fieldName];
 }
+
+size_t IngesterData::size() const
+{
+    size_t size = 0;
+    if (dataMap_.size() > 0)
+    {
+        size = dataMap_.begin()->second.size();
+    }
+
+    return size;
+}

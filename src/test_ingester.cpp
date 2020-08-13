@@ -4,6 +4,7 @@
 #include <eckit/config/YAMLConfiguration.h>
 #include <eckit/filesystem/PathName.h>
 
+#include "oops/IntSetParser.h"
 #include "BufrParser/BufrParser.h"
 #include "BufrParser/BufrDescription.h"
 #include "BufrParser/BufrMnemonicSet.h"
@@ -19,33 +20,29 @@ static const string INPUT_FILE = "/Users/rmclaren/Work/sample-bufr-data/gdas/gda
 static const string OUTPUT_FILE = "/Users/rmclaren/Temp/ioda.nc";
 
 
-const string PATH_SEPERATOR =
-#if defined _WIN32 || defined __CYGWIN__
-    "\\";
-#else
-    "/";
-#endif
-
-
-void createDescriptionManually()
+void test_createDescriptionManually()
 {
-//    auto description = BufrDescription();
-//
-//    auto set1 = BufrMnemonicSet("SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS", 1);
-//    auto set2 = BufrMnemonicSet("SAZA SOZA BEARAZ SOLAZI", 1);
-//    auto set3 = BufrMnemonicSet("TMBR", 15);
-//
-//    description.addMnemonicSet(set1);
-//    description.addMnemonicSet(set2);
-//    description.addMnemonicSet(set3);
-//
-//    auto bufrParser = BufrParser(description);
-//    auto data = bufrParser.parse(INPUT_FILE, 5);
-//
-//    cout << data->get("TMBR") << endl;
+    //Create Description
+    auto description = BufrDescription();
+
+    description.setFilepath(INPUT_FILE);
+
+    auto set1 = BufrMnemonicSet("SAID FOVN YEAR MNTH DAYS HOUR MINU SECO CLAT CLON CLATH CLONH HOLS", {1});
+    auto set2 = BufrMnemonicSet("SAZA SOZA BEARAZ SOLAZI", {1});
+    auto set3 = BufrMnemonicSet("TMBR", oops::parseIntSet("1-15"));
+
+    description.addMnemonicSet(set1);
+    description.addMnemonicSet(set2);
+    description.addMnemonicSet(set3);
+
+    //Read some data
+    auto bufrParser = BufrParser(description);
+    auto data = bufrParser.parse(4);
+
+    cout << data->get("TMBR") << endl;
 }
 
-void readDescriptionFromFile()
+void test_parsePartialFile()
 {
     auto yaml = YAMLConfiguration(PathName(CONFIG_FILE));
 
@@ -53,11 +50,56 @@ void readDescriptionFromFile()
 
     for (const auto& conf : yaml.getSubConfigurations("bufrData"))
     {
-        auto description = BufrDescription(conf);
+        auto description = BufrDescription(conf, dataPath);
         auto bufrParser = BufrParser(description);
 
-        auto filePath = dataPath + PATH_SEPERATOR + conf.getString("filename");
-        auto data = bufrParser.parse(filePath, 4);
+        shared_ptr<IngesterData> data = bufrParser.parse(5);
+
+        cout << data->get("TMBR") << endl;
+    }
+}
+
+void test_parseWholeFile()
+{
+    auto yaml = YAMLConfiguration(PathName(CONFIG_FILE));
+
+    auto dataPath = yaml.getString("dataBasepath");
+
+    for (const auto& conf : yaml.getSubConfigurations("bufrData"))
+    {
+        auto description = BufrDescription(conf, dataPath);
+        auto bufrParser = BufrParser(description);
+
+        shared_ptr<IngesterData> data = bufrParser.parse();
+    }
+}
+
+void test_parseFileIncrementally()
+{
+    auto yaml = YAMLConfiguration(PathName(CONFIG_FILE));
+
+    auto dataPath = yaml.getString("dataBasepath");
+
+    for (const auto& conf : yaml.getSubConfigurations("bufrData"))
+    {
+        auto description = BufrDescription(conf, dataPath);
+        auto bufrParser = BufrParser(description);
+
+        bool endReached = false;
+        shared_ptr<IngesterData> data;
+        do
+        {
+            auto nextData = bufrParser.parse(10);
+
+            if (nextData->size() > 0)
+            {
+                data = nextData;
+            }
+            else
+            {
+                endReached = true;
+            }
+        } while(!endReached);
 
         cout << data->get("TMBR") << endl;
     }
@@ -67,7 +109,7 @@ int main(int, const char**)
 {
     clock_t startTime = clock();
 
-    readDescriptionFromFile();
+    test_createDescriptionManually();
 
     printf ("Took %f seconds to run.\n", ((float)clock() - startTime)/CLOCKS_PER_SEC);
 

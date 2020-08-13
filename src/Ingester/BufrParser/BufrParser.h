@@ -20,10 +20,12 @@ namespace Ingester
     {
     public:
         explicit BufrParser(BufrDescription& description);
-        shared_ptr<IngesterData> parse(const string& filepath, const unsigned int messagesToParse=0);
+        ~BufrParser();
+        shared_ptr<IngesterData> parse(const unsigned int maxMessagesToParse=0);
 
     private:
         BufrDescription description_;
+        unsigned int fileUnit_;
 
         int openBufrFile(const string& filepath);
         void closeBufrFile(const unsigned int fileUnit);

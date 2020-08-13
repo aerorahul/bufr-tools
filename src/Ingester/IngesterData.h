@@ -19,6 +19,7 @@ namespace Ingester
 
         void add(const string& fieldName, const IngesterArray& data);
         IngesterArray get(const string& fieldName);
+        size_t size() const;
 
     private:
         IngesterArrayMap dataMap_;
