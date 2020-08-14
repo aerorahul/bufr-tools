@@ -9,6 +9,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <map>
 
 #include "BufrParser/BufrTypes.h"
@@ -24,7 +25,7 @@ namespace Ingester
     {
     public:
         explicit BufrCollectors(unsigned int fileUnit);
-        ~BufrCollectors();
+        ~BufrCollectors() = default;
 
         void addMnemonicSets(const std::vector<BufrMnemonicSet>& mnemonicSets);
         void addMnemonicSet(const BufrMnemonicSet& mnemonicSet);
@@ -33,6 +34,6 @@ namespace Ingester
 
     private:
         unsigned int fileUnit_;
-        std::vector<BufrCollector*> collectors_;
+        std::vector<std::shared_ptr<BufrCollector>> collectors_;
     };
 }

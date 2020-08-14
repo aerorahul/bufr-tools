@@ -22,14 +22,6 @@ BufrCollectors::BufrCollectors(unsigned int fileUnit) :
 {
 }
 
-BufrCollectors::~BufrCollectors()
-{
-    for (auto* collector : collectors_)
-    {
-        delete collector;
-    }
-}
-
 void BufrCollectors::addMnemonicSets(const vector<BufrMnemonicSet>& mnemonicSets)
 {
     for (const auto& set : mnemonicSets)
@@ -42,17 +34,17 @@ void BufrCollectors::addMnemonicSet(const BufrMnemonicSet& mnemonicSet)
 {
     if (mnemonicSet.getMaxColumn() == 1)
     {
-        collectors_.push_back(new BufrIntCollector(fileUnit_, mnemonicSet));
+        collectors_.push_back(make_shared<BufrIntCollector>(fileUnit_, mnemonicSet));
     }
     else
     {
-        collectors_.push_back(new BufrRepCollector(fileUnit_, mnemonicSet));
+        collectors_.push_back(make_shared<BufrRepCollector>(fileUnit_, mnemonicSet));
     }
 }
 
 void BufrCollectors::collect()
 {
-    for (auto* collector : collectors_)
+    for (const auto& collector : collectors_)
     {
         collector->collect();
     }
@@ -62,7 +54,7 @@ shared_ptr<IngesterData> BufrCollectors::finalize()
 {
     auto ingesterData = make_shared<IngesterData>();
 
-    for (auto* collector : collectors_)
+    for (const auto& collector : collectors_)
     {
         IngesterArrayMap dataMap = collector->finalize();
 

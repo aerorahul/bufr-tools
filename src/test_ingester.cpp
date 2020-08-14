@@ -52,7 +52,7 @@ void test_createDescriptionManually()
 
 void test_parsePartialFile()
 {
-    auto yaml = new YAMLConfiguration(PathName(CONFIG_FILE));
+    unique_ptr<YAMLConfiguration> yaml(new YAMLConfiguration(PathName(CONFIG_FILE)));
 
     auto dataPath = yaml->getString("dataBasepath");
 
@@ -65,13 +65,11 @@ void test_parsePartialFile()
 
         cout << data->get("TMBR") << endl;
     }
-
-    delete yaml;
 }
 
 void test_parseWholeFile()
 {
-    auto yaml = new YAMLConfiguration(PathName(CONFIG_FILE));
+    unique_ptr<YAMLConfiguration> yaml(new YAMLConfiguration(PathName(CONFIG_FILE)));
 
     auto dataPath = yaml->getString("dataBasepath");
 
@@ -82,13 +80,11 @@ void test_parseWholeFile()
 
         shared_ptr<IngesterData> data = bufrParser.parse();
     }
-
-    delete yaml;
 }
 
 void test_parseFileIncrementally()
 {
-    auto yaml = new YAMLConfiguration(PathName(CONFIG_FILE));
+    unique_ptr<YAMLConfiguration> yaml(new YAMLConfiguration(PathName(CONFIG_FILE)));
 
     auto dataPath = yaml->getString("dataBasepath");
 
@@ -115,8 +111,6 @@ void test_parseFileIncrementally()
 
         cout << data->get("TMBR") << endl;
     }
-
-    delete yaml;
 }
 
 int main(int, const char**)
