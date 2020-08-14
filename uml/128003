@@ -368,6 +368,20 @@ ${inlines}
       mysql_decl ""
       
     end
+
+    class 135299 "IngesterArray"
+      visibility package stereotype "typedef" explicit_base_type ""
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl "${comment}typedef ${type} ${name};
+"
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
   end
 
   simplerelation 128515

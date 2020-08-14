@@ -254,6 +254,14 @@ ${members}};
 	    classrelation_ref 137731 // <directional composition>
 	  b multiplicity "1" parent class_ref 143235 // BufrAccumulator
       end
+
+      classrelation 144899 // <dependency>
+	relation 144771 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 144899 // <dependency>
+	  b parent class_ref 135555 // bufr.interface
+      end
     end
 
     class 142979 "BufrIntCollector"

@@ -20,6 +20,11 @@ classcanvas 129283 class_ref 143235 // BufrAccumulator
   classdiagramsettings member_max_width 0 end
   xyz 855 173 2000
 end
+classcanvas 130563 class_ref 135555 // bufr.interface
+  classdiagramsettings hide_attributes yes hide_operations yes member_max_width 0 end
+  color verylightorange
+  xyz 597 96 2000
+end
 relationcanvas 128899 relation_ref 137475 // <directional composition>
   from ref 128003 z 2001 to ref 128131
   no_role_a no_role_b
@@ -42,6 +47,11 @@ relationcanvas 129795 relation_ref 137859 // <realization>
   from ref 128387 z 2001 to point 740 322
   line 130179 z 2001 to point 628 322
   line 130051 z 2001 to ref 128131
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130691 relation_ref 144771 // <dependency>
+  from ref 128131 z 2001 to ref 130563
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

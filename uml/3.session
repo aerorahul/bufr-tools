@@ -1,7 +1,7 @@
 window_sizes 1701 988 393 1302 872 64
 cleanlooks_style
 diagrams
-  classdiagram_ref 128003 // BufrFile
+  active  classdiagram_ref 128003 // BufrFile
     1237 730 100 Letter-Landscape 0 0
   classdiagram_ref 134915 // Classes
     1041 697 100 Letter-Landscape 0 0
@@ -9,14 +9,14 @@ diagrams
     950 664 100 A4 0 0
   classdiagram_ref 141699 // Classes
     1234 832 100 Legal-Landscape 0 0
-  active  sequencediagram_ref 135171 // Setting Up Pipeline And Parsing Bufr File
+  sequencediagram_ref 135171 // Setting Up Pipeline And Parsing Bufr File
     1194 837 100 Legal-Landscape 78 74
 end
 show_stereotypes
-selected sequencediagram_ref 135171 // Setting Up Pipeline And Parsing Bufr File
+selected 
+  package_ref 128771 // IodaEncoder
 open
-  classview_ref 134531 // High Level Organization
-  classview_ref 141699 // Classes
+  classview_ref 134659 // Classes
   classview_ref 134787 // Classes
 end
 end
